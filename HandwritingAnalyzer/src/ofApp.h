@@ -5,7 +5,14 @@
 
 class ofApp : public ofBaseApp{
 private:
-    std::vector<ofPath> paths_;
+    std::vector<ofPolyline> strokes_;
+    ofPolyline currStroke_;
+    // background lines
+    std::vector<ofPolyline> lines_;
+    bool isDrawing_;
+    bool wasDrawing_;
+    ofPath paths_;
+    float pen_pressure_;
     
 public:
     void setup();
@@ -25,5 +32,10 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
-		
+    
+    void drawBackground();
+    void drawCursor(TabletData &data);
+    void drawPaths();
+    float strokeWidthFromPressure();
+    
 };
