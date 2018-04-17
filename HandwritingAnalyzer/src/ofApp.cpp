@@ -8,10 +8,10 @@ void ofApp::setup(){
     
     paths_.setFilled(false);
     
-    for (int i = 300; i < 1600; i += 100) {
+    for (int i = 300; i < ofGetWindowHeight(); i += 100) {
         ofPolyline line;
         line.addVertex(ofPoint(0, i));
-        line.addVertex(ofPoint(2560, i));
+        line.addVertex(ofPoint(ofGetWindowWidth(), i));
         line.close();
         lines_.push_back(line);
     }
@@ -35,7 +35,7 @@ void ofApp::draw(){
     
     // you can also get global tablet data at any time
     TabletData& data = ofxTablet::tabletData;
-    pen_pressure_ = data.pressure * 50;
+    curr_pressure_ = data.pressure * 50;
 
     ofApp::drawPaths();
     ofApp::drawCursor(data);
@@ -44,17 +44,35 @@ void ofApp::draw(){
 
 // get data as soon as it comes in
 void ofApp::tabletMoved(TabletData &data) {
-    if (!wasDrawing_ && isDrawing_) {
+    if (curr_pressure_ >= 5) {
+        if (!isDrawing_) {
+            wasDrawing_ = false;
+        } else {
+            wasDrawing_ = true;
+        }
+        isDrawing_ = true;
+    } else {
+        if (isDrawing_) {
+            wasDrawing_ = true;
+        } else {
+            wasDrawing_ = false; // one off
+        }
+        isDrawing_ = false;
+    }
+    
+    if (!wasDrawing_ && isDrawing_) {           // just started drawing
         paths_.moveTo(ofPoint(data.abs_screen[0], data.abs_screen[1]));
-    }
-    else if (isDrawing_) {
+        //curr_path_.moveTo(ofPoint(data.abs_screen[0], data.abs_screen[1]));
+    } else if (isDrawing_) {                    // still drawing
+        //curr_path_.lineTo(ofPoint(data.abs_screen[0], data.abs_screen[1]));
         paths_.lineTo(ofPoint(data.abs_screen[0], data.abs_screen[1]));
-        currStroke_.lineTo(ofPoint(data.abs_screen[0], data.abs_screen[1]));
         paths_.newSubPath(); //?
-    }
-    else if (wasDrawing_ && !isDrawing_) {
-        strokes_.push_back(currStroke_);
-        currStroke_.clear();
+        strokes_.addPoint(ofPoint(data.abs_screen[0], data.abs_screen[1]), curr_pressure_);
+        //pressure_paths_.insert(make_pair(curr_pressure_, curr_path_));
+        //curr_path_.clear();
+        //curr_path_.moveTo(ofPoint(data.abs_screen[0], data.abs_screen[1]));
+    } else if (wasDrawing_ && !isDrawing_) {    // just stopped drawing
+        strokes_.endStroke();
     }
 }
 
@@ -67,7 +85,7 @@ void ofApp::keyPressed(int key){
     }
     if (upper_key == 'C') {
         // clear paths
-        strokes_.clear();
+        strokes_.clearStrokes();
         paths_.clear();
     }
 }
@@ -134,21 +152,6 @@ void ofApp::drawCursor(TabletData &data) {
     ofSetColor(0, 255, 153);
 
     // draw point to screen
-    if (pen_pressure_ >= 5) {
-        if (!isDrawing_) {
-            wasDrawing_ = false;
-        } else {
-            wasDrawing_ = true;
-        }
-        isDrawing_ = true;
-    } else {
-        if (isDrawing_) {
-            wasDrawing_ = true;
-        } else {
-            wasDrawing_ = false; // one off
-        }
-        isDrawing_ = false;
-    }
     ofDrawCircle(data.abs_screen[0], data.abs_screen[1], 2);
 
 }
@@ -157,14 +160,21 @@ void ofApp::drawPaths() {
     paths_.setStrokeWidth(2);
     paths_.setStrokeColor(ofColor(255, 255, 255));
     paths_.draw();
+    
+    /* test code for changing pressure
+    for (auto path : pressure_paths_) {
+        path.second.setStrokeColor(ofColor(255, 255, 255));
+        path.second.setStrokeWidth(strokeWidthFromPressure(path.first));
+        path.second.draw();
+    }*/
 }
 
-float ofApp::strokeWidthFromPressure() {
-    if (pen_pressure_ >= 75) {
+float ofApp::strokeWidthFromPressure(const float& pressure) {
+    if (pressure >= 75) {
         return 7;
-    } else if (pen_pressure_ <= 5) {
+    } else if (pressure <= 5) {
         return 0.5;
     } else {
-        return pen_pressure_/20;
+        return (pressure)/20;
     }
 }

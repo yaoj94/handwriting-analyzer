@@ -2,17 +2,29 @@
 
 #include "ofMain.h"
 #include "ofxTablet.h"
+#include "strokes.h"
+
+enum AnalyzeState {
+    WRITE,
+    DISPLAY
+};
 
 class ofApp : public ofBaseApp{
 private:
-    std::vector<ofPolyline> strokes_;
-    ofPolyline currStroke_;
-    // background lines
-    std::vector<ofPolyline> lines_;
+    Strokes strokes_;
+    
     bool isDrawing_;
     bool wasDrawing_;
     ofPath paths_;
-    float pen_pressure_;
+    float curr_pressure_;
+    
+    /* map of ofPath to float
+     ofPath keeps track of every move and associates a pressure to it */
+    std::unordered_map<float, ofPath> pressure_paths_;
+    ofPath curr_path_;
+    
+    // background lines
+    std::vector<ofPolyline> lines_;
     
 public:
     void setup();
@@ -36,6 +48,6 @@ public:
     void drawBackground();
     void drawCursor(TabletData &data);
     void drawPaths();
-    float strokeWidthFromPressure();
+    float strokeWidthFromPressure(const float& pressure);
     
 };
