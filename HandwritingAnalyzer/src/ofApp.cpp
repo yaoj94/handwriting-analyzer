@@ -35,9 +35,10 @@ void ofApp::draw(){
     
     // you can also get global tablet data at any time
     TabletData& data = ofxTablet::tabletData;
-    curr_pressure_ = data.pressure * 50;
+    curr_pressure_ = data.pressure * 100;
 
     ofApp::drawPaths();
+    //strokes_.drawStrokes();
     ofApp::drawCursor(data);
     
 }
@@ -51,6 +52,8 @@ void ofApp::tabletMoved(TabletData &data) {
             wasDrawing_ = true;
         }
         isDrawing_ = true;
+        //std::cout << "Pressure: " << curr_pressure_ << std::endl;
+
     } else {
         if (isDrawing_) {
             wasDrawing_ = true;
@@ -84,8 +87,12 @@ void ofApp::keyPressed(int key){
         //done
     }
     if (upper_key == 'C') {
+        std::cout << "Number of strokes: " << strokes_.getLength() << std::endl;
+        std::cout << "Average speed: " << strokes_.getAverageSpeed() << std::endl;
+        std::cout << "Average pressure: " << strokes_.calculateAveragePressure() << std::endl;
+
         // clear paths
-        strokes_.clearStrokes();
+        strokes_.resetStrokes();
         paths_.clear();
     }
 }
