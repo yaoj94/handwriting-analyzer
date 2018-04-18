@@ -3,6 +3,8 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    ofHideCursor();
+    
     isDrawing_ = false;
     wasDrawing_ = false;
     
@@ -18,7 +20,6 @@ void ofApp::setup(){
     
     ofxTablet::start();
     
-    // if you want to get data events, you can add a listener to ofxTablet::tabletEvent
     ofAddListener(ofxTablet::tabletEvent, this, &ofApp::tabletMoved);
     
 }
@@ -33,7 +34,6 @@ void ofApp::draw(){
     
     ofApp::drawBackground();
     
-    // you can also get global tablet data at any time
     TabletData& data = ofxTablet::tabletData;
     curr_pressure_ = data.pressure * 100;
 
@@ -70,12 +70,12 @@ void ofApp::tabletMoved(TabletData &data) {
         //curr_path_.lineTo(ofPoint(data.abs_screen[0], data.abs_screen[1]));
         paths_.lineTo(ofPoint(data.abs_screen[0], data.abs_screen[1]));
         paths_.newSubPath(); //?
-        strokes_.addPoint(ofPoint(data.abs_screen[0], data.abs_screen[1]), curr_pressure_);
+        strokes_.AddPoint(ofPoint(data.abs_screen[0], data.abs_screen[1]), curr_pressure_);
         //pressure_paths_.insert(make_pair(curr_pressure_, curr_path_));
         //curr_path_.clear();
         //curr_path_.moveTo(ofPoint(data.abs_screen[0], data.abs_screen[1]));
     } else if (wasDrawing_ && !isDrawing_) {    // just stopped drawing
-        strokes_.endStroke();
+        strokes_.EndStroke();
     }
 }
 
@@ -85,15 +85,58 @@ void ofApp::keyPressed(int key){
     
     if (upper_key == 'D') {
         //done
+        strokes_.Analyze();
+        std::cout << "Letter size: " << strokes_.GetLetterSize() << std::endl;
+        std::cout << "Left Margin: " << strokes_.GetLeftMargin() << std::endl;
+        std::cout << "Right Margin: " << strokes_.GetRightMargin() << std::endl;
     }
     if (upper_key == 'C') {
-        std::cout << "Number of strokes: " << strokes_.getLength() << std::endl;
-        std::cout << "Average speed: " << strokes_.getAverageSpeed() << std::endl;
-        std::cout << "Average pressure: " << strokes_.calculateAveragePressure() << std::endl;
+        std::cout << "Number of strokes: " << strokes_.GetLength() << std::endl;
+        std::cout << "Average speed: " << strokes_.GetAverageSpeed() << std::endl;
+        std::cout << "Average pressure: " << strokes_.CalculateAveragePressure() << std::endl;
 
         // clear paths
-        strokes_.resetStrokes();
+        strokes_.ResetStrokes();
         paths_.clear();
+    }
+}
+
+void ofApp::drawBackground() {
+    ofBackground(0, 0, 0);
+    ofSetColor(179, 236, 255);
+    for (auto line : lines_) {
+        line.draw();
+    }
+}
+
+void ofApp::drawCursor(TabletData &data) {
+    ofSetColor(0, 255, 153);
+    
+    // draw point to screen
+    ofDrawCircle(data.abs_screen[0], data.abs_screen[1], 2);
+    
+}
+
+void ofApp::drawPaths() {
+    paths_.setStrokeWidth(2);
+    paths_.setStrokeColor(ofColor(255, 255, 255));
+    paths_.draw();
+    
+    /* test code for changing pressure
+     for (auto path : pressure_paths_) {
+     path.second.setStrokeColor(ofColor(255, 255, 255));
+     path.second.setStrokeWidth(strokeWidthFromPressure(path.first));
+     path.second.draw();
+     }*/
+}
+
+float ofApp::strokeWidthFromPressure(const float& pressure) {
+    if (pressure >= 75) {
+        return 7;
+    } else if (pressure <= 5) {
+        return 0.5;
+    } else {
+        return (pressure)/20;
     }
 }
 
@@ -145,43 +188,4 @@ void ofApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
-}
-
-void ofApp::drawBackground() {
-    ofBackground(0, 0, 0);
-    ofSetColor(179, 236, 255);
-    for (auto line : lines_) {
-        line.draw();
-    }
-}
-
-void ofApp::drawCursor(TabletData &data) {
-    ofSetColor(0, 255, 153);
-
-    // draw point to screen
-    ofDrawCircle(data.abs_screen[0], data.abs_screen[1], 2);
-
-}
-
-void ofApp::drawPaths() {
-    paths_.setStrokeWidth(2);
-    paths_.setStrokeColor(ofColor(255, 255, 255));
-    paths_.draw();
-    
-    /* test code for changing pressure
-    for (auto path : pressure_paths_) {
-        path.second.setStrokeColor(ofColor(255, 255, 255));
-        path.second.setStrokeWidth(strokeWidthFromPressure(path.first));
-        path.second.draw();
-    }*/
-}
-
-float ofApp::strokeWidthFromPressure(const float& pressure) {
-    if (pressure >= 75) {
-        return 7;
-    } else if (pressure <= 5) {
-        return 0.5;
-    } else {
-        return (pressure)/20;
-    }
 }
