@@ -9,30 +9,38 @@ enum AnalyzeState {
     DISPLAY
 };
 
-class ofApp : public ofBaseApp{
+class ofApp : public ofBaseApp {
 private:
     Strokes strokes_;
-    
-    bool isDrawing_;
-    bool wasDrawing_;
+
     ofPath paths_;
     float curr_pressure_;
     
-    /* map of ofPath to float
-     ofPath keeps track of every move and associates a pressure to it */
-    std::unordered_map<float, ofPath> pressure_paths_;
-    ofPath curr_path_;
+    // flags to keep track of drawing state
+    bool isDrawing_;
+    bool wasDrawing_;
     
-    // background lines
+    // stores background lines
     std::vector<ofPolyline> lines_;
+    
+    ofImage pen_cursor_;
+
+    /* map of ofPath to float
+     ofPath keeps track of every move and associates a pressure to it
+    std::unordered_map<float, ofPath> pressure_paths_;
+    ofPath curr_path_; */
     
 public:
     void setup();
     void update();
     void draw();
 
-    void tabletMoved(TabletData &data);  // for receiving tablet events directly
-
+    void drawBackground();
+    void drawCursor();
+    void drawPaths();
+    float strokeWidthFromPressure(const float& pressure);
+    
+    void tabletMoved(TabletData &data); // Reads data from tablet once data is received
     void keyPressed(int key);
     void keyReleased(int key);
     void mouseMoved(int x, int y );
@@ -44,10 +52,4 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
-    
-    void drawBackground();
-    void drawCursor(TabletData &data);
-    void drawPaths();
-    float strokeWidthFromPressure(const float& pressure);
-    
 };

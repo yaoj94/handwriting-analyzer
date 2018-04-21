@@ -1,16 +1,20 @@
 #include "ofApp.h"
 #include "ofxTablet.h"
 
-//--------------------------------------------------------------
+// Set up window, paths, and tablet
 void ofApp::setup(){
+    ofSetVerticalSync(false);
     ofSetWindowTitle("Handwriting Analyzer");
     ofHideCursor();
+    
+    pen_cursor_.load("/Users/Jenn/Documents/of_v0.9.8_osx_release/apps/myApps/final-project-yaoj94/HandwritingAnalyzer/data/pen.png");
     
     isDrawing_ = false;
     wasDrawing_ = false;
     
-    paths_.setFilled(false);
+    paths_.setFilled(false); // don't fill paths
     
+    // set up background lines
     for (int i = 300; i < ofGetWindowHeight(); i += 100) {
         ofPolyline line;
         line.addVertex(ofPoint(0, i));
@@ -19,8 +23,8 @@ void ofApp::setup(){
         lines_.push_back(line);
     }
     
+    // from ofxTablet example code
     ofxTablet::start();
-    
     ofAddListener(ofxTablet::tabletEvent, this, &ofApp::tabletMoved);
     
 }
@@ -30,7 +34,7 @@ void ofApp::update(){
 
 }
 
-//--------------------------------------------------------------
+// Draws background, instructions, and paths
 void ofApp::draw(){
     
     ofApp::drawBackground();
@@ -39,17 +43,17 @@ void ofApp::draw(){
     string instructions = "Write something! Press 'D' when done. Press 'C' to start over.";
     ofDrawBitmapString(instructions, 100, 30);
     
-    TabletData& data = ofxTablet::tabletData;
-    curr_pressure_ = data.pressure * 100;
-
     ofApp::drawPaths();
-    //strokes_.drawStrokes();
-    ofApp::drawCursor(data);
+    ofApp::drawCursor();
     
+    //strokes_.drawStrokes();
 }
 
-// get data as soon as it comes in
+// Reads data from tablet once data is received
 void ofApp::tabletMoved(TabletData &data) {
+    curr_pressure_ = data.pressure * 100;
+
+    // Change drawing flags based on pressure
     if (curr_pressure_ >= 5) {
         if (!isDrawing_) {
             wasDrawing_ = false;
@@ -68,6 +72,7 @@ void ofApp::tabletMoved(TabletData &data) {
         isDrawing_ = false;
     }
     
+    // Add to path
     if (!wasDrawing_ && isDrawing_) {           // just started drawing
         paths_.moveTo(ofPoint(data.abs_screen[0], data.abs_screen[1]));
         //curr_path_.moveTo(ofPoint(data.abs_screen[0], data.abs_screen[1]));
@@ -84,28 +89,33 @@ void ofApp::tabletMoved(TabletData &data) {
     }
 }
 
-//--------------------------------------------------------------
+// 'D' Changes state when user is done
+// 'C' Clears strokes when user wants to start over
 void ofApp::keyPressed(int key){
     int upper_key = toupper(key);
     
     if (upper_key == 'D') {
-        //done
+        // Done: analyse strokes, check for doneness, change states
         strokes_.Analyze();
+        
+        // Print out data for testing
         std::cout << "Letter size: " << strokes_.GetLetterSize() << std::endl;
         std::cout << "Left Margin: " << strokes_.GetLeftMargin() << std::endl;
         std::cout << "Right Margin: " << strokes_.GetRightMargin() << std::endl;
-    }
-    if (upper_key == 'C') {
-        std::cout << "Number of strokes: " << strokes_.GetLength() << std::endl;
+        std::cout << "Number of strokes: " << strokes_.GetNumStrokes() << std::endl;
         std::cout << "Average speed: " << strokes_.GetSpeed() << std::endl;
         std::cout << "Average pressure: " << strokes_.GetPressure() << std::endl;
         std::cout << "Connectedness: " << strokes_.GetConnectedness() << std::endl;
-        // clear paths
+        std::cout << std::endl;
+    }
+    if (upper_key == 'C') {
+        // Clear all paths
         strokes_.ResetStrokes();
         paths_.clear();
     }
 }
 
+// Draws background lines
 void ofApp::drawBackground() {
     ofBackground(0, 0, 0);
     ofSetColor(179, 236, 255);
@@ -114,14 +124,17 @@ void ofApp::drawBackground() {
     }
 }
 
-void ofApp::drawCursor(TabletData &data) {
-    ofSetColor(0, 255, 153);
-    
+// Draws cursor wherever the pen is
+void ofApp::drawCursor() {
+    ofSetColor(66, 179, 244);
+    pen_cursor_.draw(ofxTablet::tabletData.abs_screen[0], ofxTablet::tabletData.abs_screen[1] - 45, 45, 45);
+
     // draw point to screen
-    ofDrawCircle(data.abs_screen[0], data.abs_screen[1], 2);
-    
+    //ofSetColor(0, 255, 153);
+    //ofDrawCircle(ofxTablet::tabletData.abs_screen[0], ofxTablet::tabletData.abs_screen[1], 2);
 }
 
+// Draws handwriting path to screen with set width and color
 void ofApp::drawPaths() {
     paths_.setStrokeWidth(2);
     paths_.setStrokeColor(ofColor(255, 255, 255));
@@ -135,13 +148,14 @@ void ofApp::drawPaths() {
      }*/
 }
 
+// Calculates the width of the stroke based on pressure
 float ofApp::strokeWidthFromPressure(const float& pressure) {
     if (pressure >= 75) {
         return 7;
     } else if (pressure <= 5) {
         return 0.5;
     } else {
-        return (pressure)/20;
+        return pressure / 20;
     }
 }
 
