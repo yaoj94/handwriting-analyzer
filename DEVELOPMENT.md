@@ -10,6 +10,9 @@
 - [X] Draw strokes to screen
   * Successfully draws lines as pen moves
   * Problem: Not important for functionality but I can't figure out how to draw line thickness with respect to pen pressure so it only draws in one thickness
+  * Changed cursor to photo of a pen
+  * Problem: Draws from the top left corner of the image but it needs to be the bottom left
+  * Solution: Shifted the image up by adding the image height to the y coordinate when drawing
 
 - [X] Implement timer to read writing speed
   * Uses openframeworks built in time functions to keep track of how long the pen is drawing for
@@ -19,6 +22,7 @@
 - [ ] Come up with personality characteristics and analyze data for them
   * Stores pressure at every point vector and calculates average pressure, finds margins by leftmost and rightmost points, gets connectedness by checking how many times strokes intersect
   * Calculate connectedness by counting overlaps and subtracting from size of strokes rather than having separate variable to count both separately
+  * Question: Store pressures in vector to calculate average of later or count number of points and add up pressures as the program goes?
   * Problem: If I write too fast, the points don't compare that quickly. i.e. crossing t's, a t would have connectedness of 2
 
 - [ ] Implement methods to check whether or not the user wrote something before pressing done
