@@ -1,12 +1,16 @@
 #include "strokes.h"
 
-Strokes::Strokes() : total_time_millis_(0), perimeter_(0), reset_timer_(true), left_margin_(0), right_margin_(0), letter_size_(0), leftmost_x_(ofGetWindowWidth()), rightmost_x_(0), connectedness_(0), connected_points_(0) {
-}
+// Constructor that initializes member variables
+Strokes::Strokes() : avg_pressure_(0), letter_size_(0), speed_(0), connectedness_(0), left_margin_(0), right_margin_(0), perimeter_(0), total_time_millis_(0), reset_timer_(true), connected_points_(0),  leftmost_x_(ofGetWindowWidth()), rightmost_x_(0) {}
 
+// This method is called when the user is drawing and a point needs to be added to the line.
+// Private variables are updated to keep track of the timer, margins, and connectedness value.
+// Input: ofPoint the point to add, float the pressure of the pen at that point
 void Strokes::AddPoint(const ofPoint& point, float& pressure) {
     curr_stroke_.lineTo(point);
     pen_pressures_.push_back(pressure);
     
+    // reset timer at beginning of stroke
     if (reset_timer_) {
         ofResetElapsedTimeCounter();
         reset_timer_ = false;
@@ -27,59 +31,47 @@ void Strokes::AddPoint(const ofPoint& point, float& pressure) {
     }
 }
 
+// This method is called when the user lifts the pen after each stroke. Member variables are updated accordingly.
 void Strokes::EndStroke() {
-    perimeter_ += curr_stroke_.getPerimeter();
-    strokes_.push_back(curr_stroke_);
-    prev_stroke_ = curr_stroke_;
-    curr_stroke_.clear();
+    perimeter_ += curr_stroke_.getPerimeter();  // add to total length
+    strokes_.push_back(curr_stroke_);           // store all previous strokes
+    prev_stroke_ = curr_stroke_;                // save previous stroke
+    curr_stroke_.clear();                       // clear current stroke for next stroke
+    
+    // update time variables
     total_time_millis_ += ofGetElapsedTimeMillis();
     reset_timer_ = true;
-    
 }
 
+// This method resets all variables and is called when the user wants to start over
 void Strokes::ResetStrokes() {
+    strokes_.clear();
     curr_stroke_.clear();
     prev_stroke_.clear();
-    strokes_.clear();
-    pen_pressures_.clear();
     
-    perimeter_ = 0;
-    
-    total_time_millis_ = 0;
-    reset_timer_ = true;
-    
-    leftmost_x_ = ofGetWindowWidth();
-    rightmost_x_ = 0;
+    avg_pressure_ = 0;
+    letter_size_ = 0;
+    speed_ = 0;
+    connectedness_ = 0;
     left_margin_ = 0;
     right_margin_ = 0;
     
-    letter_size_ = 0;
-    
-    connectedness_ = 0;
+    pen_pressures_.clear();
+    perimeter_ = 0;
+    total_time_millis_ = 0;
+    reset_timer_ = true;
     connected_points_ = 0;
-    
-    speed_ = 0;
-    avg_pressure_ = 0;
+    leftmost_x_ = ofGetWindowWidth();
+    rightmost_x_ = 0;
 }
 
-void Strokes::DrawStrokes() {
-    for (auto stroke : strokes_) {
-        stroke.draw();
-    }
-}
-
-// returns a number ranging from around 15 for slow and 45 for fast
-uint Strokes::CalculateAverageSpeed() {
-    if (total_time_millis_ <= 0 || perimeter_ <= 0) {
+// Method to calculate the average pressure from stored values
+// Returns an unsigned integer ranging from 1 (light) to 100 (heavy)
+uint Strokes::CalculateAveragePressure() {
+    if (pen_pressures_.size() == 0) {
         return 0;
     }
-
-    double speed = perimeter_/total_time_millis_;
-    return int(speed * 100);
-}
-
-// returns number ranging from 1-33 for light, 33-66 for medium, 66-100 for heavy
-uint Strokes::CalculateAveragePressure() {
+    
     uint total_pressure = 0;
     for (float pressure : pen_pressures_) {
         total_pressure += pressure;
@@ -87,13 +79,17 @@ uint Strokes::CalculateAveragePressure() {
     return total_pressure/pen_pressures_.size();
 }
 
+// Calculates average letter size from y values of each stroke
+// Returns an unsigned int ranging from ~15 (small) to ~45 (large)
 uint Strokes::CalculateAverageLetterSize() {
     double average = 0;
-    // find AVERAGE max y-coord and min y-coord
+    
+    // find average max y-coord and min y-coord
     for (auto stroke : strokes_) {
         double upper_y = 0;
         double lower_y = 0;
         
+        // find upper and lower bounds
         double center_x = stroke.getPointAtPercent(0.5).x; //getCentroid2D().x;
         lower_y = stroke.getClosestPoint(ofPoint(center_x, 0)).y;
         upper_y = stroke.getClosestPoint(ofPoint(center_x, ofGetWindowHeight())).y;
@@ -109,9 +105,21 @@ uint Strokes::CalculateAverageLetterSize() {
         }
     }
     
-    return (uint) average;
+    return uint(average);
 }
 
+// Calculates average speed from total time and perimeter
+// Returns an unsigned int ranging from around ~15 (slow) and ~45 (fast)
+uint Strokes::CalculateAverageSpeed() {
+    if (total_time_millis_ <= 0 || perimeter_ <= 0) {
+        return 0;
+    }
+    
+    double speed = perimeter_/total_time_millis_;
+    return uint(speed * 100);
+}
+
+// Sets variables that store analysis data to be called when user is done writing
 void Strokes::Analyze() {
     letter_size_ = Strokes::CalculateAverageLetterSize();
     
@@ -124,30 +132,38 @@ void Strokes::Analyze() {
     speed_ = Strokes::CalculateAverageSpeed();
 }
 
-int Strokes::GetLetterSize() {
+// Accessor methods
+uint Strokes::GetPressure() {
+    return avg_pressure_;
+}
+
+uint Strokes::GetLetterSize() {
     return letter_size_;
-}
-
-int Strokes::GetLeftMargin() {
-    return left_margin_;
-}
-
-int Strokes::GetRightMargin() {
-    return right_margin_;
-}
-
-int Strokes::GetConnectedness() {
-    return connectedness_;
 }
 
 uint Strokes::GetSpeed() {
     return speed_;
 }
 
-uint Strokes::GetPressure() {
-    return avg_pressure_;
+uint Strokes::GetConnectedness() {
+    return connectedness_;
 }
 
-int Strokes::GetLength() {
+uint Strokes::GetLeftMargin() {
+    return left_margin_;
+}
+
+uint Strokes::GetRightMargin() {
+    return right_margin_;
+}
+
+uint Strokes::GetNumStrokes() {
     return strokes_.size();
+}
+
+// Testing method to make sure strokes are being stored correctly.
+void Strokes::DrawStrokes() {
+    for (auto stroke : strokes_) {
+        stroke.draw();
+    }
 }

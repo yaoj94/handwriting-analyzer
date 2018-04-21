@@ -14,61 +14,68 @@ private:
     ofPolyline prev_stroke_;
     
     // variables to store data for analysis
-    uint avg_pressure_;
-    uint speed_;
-    int left_margin_;
-    int right_margin_;
-    uint letter_size_; // ranges from ~15 for small and ~45 for large
-    int connectedness_; // stores number of disconnected strokes, should range from number of words to number of letters
+    uint avg_pressure_;     // ranges from 1 - 100
+    uint letter_size_;      // ranges from ~10 - 50
+    uint speed_;            // ranges from ~10 - 30
+    uint connectedness_;    // range from number of words to number of letters
+                            // there are 2 ways for handwriting to be connected
+                            // 1. writing in cursive or with few lifts
+                            // 2. writing so close together that the letters intersect
+    uint left_margin_;
+    uint right_margin_;
     
     // helper variables
     std::vector<float> pen_pressures_;
+    double perimeter_;      // total length of the lines
+    uint total_time_millis_;// keep track of total time in milliseconds
+    bool reset_timer_;      // flag to reset the timer every stroke
+    uint connected_points_; // count number of connected points
+    uint leftmost_x_;       // keep track of margins
+    uint rightmost_x_;
     
-    // total length of the lines
-    double perimeter_;
+    // Helper methods to calculate data
     
-    //total time - calculate speed by doing total time/ getPerimeter()
-    uint total_time_millis_;
-    // flag to reset the timer
-    bool reset_timer_;
-    
-    // space of margins
-    int leftmost_x_;
-    int rightmost_x_;
-    
-    // there are 2 ways for handwriting to be connected
-    // 1. writing in cursive or with few lifts
-    // 2. writing so close together that the letters intersect
-    int connected_points_;
-    
-    // helper methods to calculate data
-    uint CalculateAverageSpeed(); // this is uint because speed will always be positive or 0 and I only need an approximate number to characterize
+    // Method to calculate the average pressure from stored values
+    // Returns an unsigned integer ranging from 1 (light) to 100 (heavy)
     uint CalculateAveragePressure();
+    
+    // Calculates average letter size from y values of each stroke
+    // Returns an unsigned int ranging from ~15 (small) to ~45 (large)
     uint CalculateAverageLetterSize();
+    
+    // Calculates average speed from total time and perimeter
+    // Returns an unsigned int ranging from around ~15 (slow) and ~45 (fast)
+    uint CalculateAverageSpeed();
     
 public:
     Strokes();
-    // add point
+    
+    // This method is called when the user is drawing and a point needs to be added to the line.
+    // Private variables are updated to keep track of the timer, margins, and connectedness value.
+    // Input: ofPoint the point to add, float the pressure of the pen at that point
     void AddPoint(const ofPoint& point, float& pressure);
-    // end stroke (clear currStroke, add to vector)
+    
+    // This method is called when the user lifts the pen after each stroke. Member variables are updated accordingly.
     void EndStroke();
-    // clears all data
+    
+    // This method resets all variables and is called when the user wants to start over
     void ResetStrokes();
     
+    // Sets variables that store analysis data to be called when user is done writing
     void Analyze();
     
-    void DrawStrokes(); //for testing purposes
-    int GetLength();
-    
-    int GetLetterSize();
-    
-    int GetLeftMargin();
-    int GetRightMargin();
-    
-    int GetConnectedness();
-    
-    uint GetSpeed();
+    // Accessor methods
     uint GetPressure();
+    uint GetLetterSize();
+    uint GetSpeed();
+    uint GetConnectedness();
+    uint GetLeftMargin();
+    uint GetRightMargin();
+    
+    // Returns size of strokes_
+    uint GetNumStrokes();
+
+    void DrawStrokes(); //for testing purposes
 };
 
 #endif /* strokes_h */
