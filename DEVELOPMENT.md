@@ -18,6 +18,7 @@
 
 - [ ] Come up with personality characteristics and analyze data for them
   * Stores pressure at every point vector and calculates average pressure, finds margins by leftmost and rightmost points, gets connectedness by checking how many times strokes intersect
+  * Calculate connectedness by counting overlaps and subtracting from size of strokes rather than having separate variable to count both separately
   * Problem: If I write too fast, the points don't compare that quickly. i.e. crossing t's, a t would have connectedness of 2
 
 - [ ] Implement methods to check whether or not the user wrote something before pressing done
