@@ -3,24 +3,25 @@
 
 // Set up window, paths, and tablet
 void ofApp::setup(){
-    ofSetVerticalSync(false);
     ofSetWindowTitle("Handwriting Analyzer");
+    ofBackground(0, 0, 0);
+
     ofHideCursor();
     
     pen_cursor_.load("/Users/Jenn/Documents/of_v0.9.8_osx_release/apps/myApps/final-project-yaoj94/HandwritingAnalyzer/data/pen.png");
+    
+    text_.load("/Users/Jenn/Documents/of_v0.9.8_osx_release/apps/myApps/final-project-yaoj94/HandwritingAnalyzer/data/Century Gothic", 18);
     
     isDrawing_ = false;
     wasDrawing_ = false;
     
     paths_.setFilled(false); // don't fill paths
+    background_lines_.setFilled(false);
     
     // set up background lines
     for (int i = 300; i < ofGetWindowHeight(); i += 100) {
-        ofPolyline line;
-        line.addVertex(ofPoint(0, i));
-        line.addVertex(ofPoint(ofGetWindowWidth(), i));
-        line.close();
-        lines_.push_back(line);
+        background_lines_.moveTo(ofPoint(0, i));
+        background_lines_.lineTo(ofPoint(ofGetWindowWidth(), i));
     }
     
     // from ofxTablet example code
@@ -39,9 +40,10 @@ void ofApp::draw(){
     
     ofApp::drawBackground();
     
-    ofSetColor(174, 0, 0);
+    ofSetColor(0, 255, 153);
     string instructions = "Write something! Press 'D' when done. Press 'C' to start over.";
-    ofDrawBitmapString(instructions, 100, 30);
+    text_.drawString(instructions, 50, 80);
+    //ofDrawBitmapString(instructions, 100, 30);
     
     ofApp::drawPaths();
     ofApp::drawCursor();
@@ -117,11 +119,9 @@ void ofApp::keyPressed(int key){
 
 // Draws background lines
 void ofApp::drawBackground() {
-    ofBackground(0, 0, 0);
-    ofSetColor(179, 236, 255);
-    for (auto line : lines_) {
-        line.draw();
-    }
+    background_lines_.setStrokeWidth(1);
+    background_lines_.setStrokeColor(ofColor(179, 236, 255));
+    background_lines_.draw();
 }
 
 // Draws cursor wherever the pen is

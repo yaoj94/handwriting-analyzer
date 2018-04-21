@@ -21,9 +21,10 @@ private:
     bool wasDrawing_;
     
     // stores background lines
-    std::vector<ofPolyline> lines_;
+    ofPath background_lines_; 
     
     ofImage pen_cursor_;
+    ofTrueTypeFont text_;
 
     /* map of ofPath to float
      ofPath keeps track of every move and associates a pressure to it
