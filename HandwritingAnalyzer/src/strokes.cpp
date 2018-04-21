@@ -126,7 +126,11 @@ void Strokes::Analyze() {
     left_margin_ = leftmost_x_;
     right_margin_ = ofGetWindowWidth() - rightmost_x_;
     
-    connectedness_ = strokes_.size() - connected_points_;
+    if (connected_points_ >= strokes_.size()) {
+        connectedness_ = 1;
+    } else {
+        connectedness_ = strokes_.size() - connected_points_;
+    }
     
     avg_pressure_ = Strokes::CalculateAveragePressure();
     speed_ = Strokes::CalculateAverageSpeed();
