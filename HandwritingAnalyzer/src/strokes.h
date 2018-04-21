@@ -8,27 +8,43 @@
 
 class Strokes {
 private:
-    // keep track of the strokes to draw
+    // keep track of the strokes
     std::vector<ofPolyline> strokes_; // length ~ connectedness
     ofPolyline curr_stroke_;
+    ofPolyline prev_stroke_;
     
+    // variables to store data for analysis
+    uint avg_pressure_;
+    uint speed_;
+    int left_margin_;
+    int right_margin_;
+    uint letter_size_; // ranges from ~15 for small and ~45 for large
+    int connectedness_; // stores number of disconnected strokes, should range from number of words to number of letters
+    
+    // helper variables
     std::vector<float> pen_pressures_;
     
-    double perimeter_; // total length of the lines
+    // total length of the lines
+    double perimeter_;
     
     //total time - calculate speed by doing total time/ getPerimeter()
     uint total_time_millis_;
-    bool reset_timer_; // flag to reset the timer
+    // flag to reset the timer
+    bool reset_timer_;
     
     // space of margins
-    int left_margin_;
-    int right_margin_;
-    int leftmost_x;
-    int rightmost_x;
+    int leftmost_x_;
+    int rightmost_x_;
     
-    double letter_size_; // ranges from ~5 for small and ~35 for large
+    // there are 2 ways for handwriting to be connected
+    // 1. writing in cursive or with few lifts
+    // 2. writing so close together that the letters intersect
+    int connected_points_;
     
-    int connectedness_;
+    // helper methods to calculate data
+    uint CalculateAverageSpeed(); // this is uint because speed will always be positive or 0 and I only need an approximate number to characterize
+    uint CalculateAveragePressure();
+    uint CalculateAverageLetterSize();
     
 public:
     Strokes();
@@ -39,10 +55,6 @@ public:
     // clears all data
     void ResetStrokes();
     
-    uint GetAverageSpeed(); // this is uint because speed will always be positive or 0 and I only need an approximate number to characterize
-    
-    uint CalculateAveragePressure();
-    
     void Analyze();
     
     void DrawStrokes(); //for testing purposes
@@ -52,6 +64,11 @@ public:
     
     int GetLeftMargin();
     int GetRightMargin();
+    
+    int GetConnectedness();
+    
+    uint GetSpeed();
+    uint GetPressure();
 };
 
 #endif /* strokes_h */

@@ -3,6 +3,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    ofSetWindowTitle("Handwriting Analyzer");
     ofHideCursor();
     
     isDrawing_ = false;
@@ -33,6 +34,10 @@ void ofApp::update(){
 void ofApp::draw(){
     
     ofApp::drawBackground();
+    
+    ofSetColor(174, 0, 0);
+    string instructions = "Write something! Press 'D' when done. Press 'C' to start over.";
+    ofDrawBitmapString(instructions, 100, 30);
     
     TabletData& data = ofxTablet::tabletData;
     curr_pressure_ = data.pressure * 100;
@@ -92,9 +97,9 @@ void ofApp::keyPressed(int key){
     }
     if (upper_key == 'C') {
         std::cout << "Number of strokes: " << strokes_.GetLength() << std::endl;
-        std::cout << "Average speed: " << strokes_.GetAverageSpeed() << std::endl;
-        std::cout << "Average pressure: " << strokes_.CalculateAveragePressure() << std::endl;
-
+        std::cout << "Average speed: " << strokes_.GetSpeed() << std::endl;
+        std::cout << "Average pressure: " << strokes_.GetPressure() << std::endl;
+        std::cout << "Connectedness: " << strokes_.GetConnectedness() << std::endl;
         // clear paths
         strokes_.ResetStrokes();
         paths_.clear();
