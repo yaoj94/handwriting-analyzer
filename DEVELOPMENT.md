@@ -6,6 +6,7 @@
   * Solution: I'll have the application be fullscreen for now
 
 - [X] Draw background
+  * Changed background lines from vector of ofPolyline to a single ofPath object
 
 - [X] Draw strokes to screen
   * Successfully draws lines as pen moves
@@ -25,6 +26,7 @@
   * Question: Store pressures in vector to calculate average of later or count number of points and add up pressures as the program goes?
   * Problem: If I write too fast, the points don't compare that quickly. i.e. crossing t's, a t would have connectedness of 2
 
-- [ ] Implement methods to check whether or not the user wrote something before pressing done
+- [X] Implement methods to check whether or not the user wrote something before pressing done
+  * Split up draw function to make draw method neater, added AnalysisState enum to switch between states - only changes if the number of strokes are around the number of words in the quote
 
 - [ ] Print personality characteristics to screen
