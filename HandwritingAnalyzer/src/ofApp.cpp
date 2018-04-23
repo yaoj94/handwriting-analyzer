@@ -12,9 +12,6 @@ void ofApp::setup(){
     
     text_.load("/Users/Jenn/Documents/of_v0.9.8_osx_release/apps/myApps/final-project-yaoj94/HandwritingAnalyzer/data/Century Gothic", 18);
     
-    isDrawing_ = false;
-    wasDrawing_ = false;
-    
     paths_.setFilled(false); // don't fill paths
     background_lines_.setFilled(false);
     
@@ -37,21 +34,15 @@ void ofApp::update(){
 
 // Draws background, instructions, and paths
 void ofApp::draw(){
+    if (curr_state_ == WRITE) {
+        ofApp::drawWriteState();
+    } else {
+        
+    }
     
-    ofApp::drawBackground();
-    
-    ofSetColor(0, 255, 153);
-    string instructions = "Write something! Press 'D' when done. Press 'C' to start over.";
-    text_.drawString(instructions, 50, 80);
-    //ofDrawBitmapString(instructions, 100, 30);
-    
-    ofApp::drawPaths();
-    ofApp::drawCursor();
-    
-    //strokes_.drawStrokes();
 }
 
-// Reads data from tablet once data is received
+// Reads data from tablet once data is received and updates drawing state flags
 void ofApp::tabletMoved(TabletData &data) {
     curr_pressure_ = data.pressure * 100;
 
@@ -77,6 +68,7 @@ void ofApp::tabletMoved(TabletData &data) {
     // Add to path
     if (!wasDrawing_ && isDrawing_) {           // just started drawing
         paths_.moveTo(ofPoint(data.abs_screen[0], data.abs_screen[1]));
+        strokes_.AddPoint(ofPoint(data.abs_screen[0], data.abs_screen[1]), curr_pressure_);
         //curr_path_.moveTo(ofPoint(data.abs_screen[0], data.abs_screen[1]));
     } else if (isDrawing_) {                    // still drawing
         //curr_path_.lineTo(ofPoint(data.abs_screen[0], data.abs_screen[1]));
@@ -109,6 +101,12 @@ void ofApp::keyPressed(int key){
         std::cout << "Average pressure: " << strokes_.GetPressure() << std::endl;
         std::cout << "Connectedness: " << strokes_.GetConnectedness() << std::endl;
         std::cout << std::endl;
+        
+        if (strokes_.GetNumStrokes() <= 20) { // number of words
+            print_not_done_ = true;
+        } else {
+            curr_state_ = DISPLAY;
+        }
     }
     if (upper_key == 'C') {
         // Clear all paths
@@ -118,7 +116,7 @@ void ofApp::keyPressed(int key){
 }
 
 // Draws background lines
-void ofApp::drawBackground() {
+void ofApp::drawBackgroundLines() {
     background_lines_.setStrokeWidth(1);
     background_lines_.setStrokeColor(ofColor(179, 236, 255));
     background_lines_.draw();
@@ -157,6 +155,35 @@ float ofApp::strokeWidthFromPressure(const float& pressure) {
     } else {
         return pressure / 20;
     }
+}
+
+void ofApp::drawWriteState() {
+    ofApp::drawBackgroundLines();
+    
+    ofSetColor(0, 255, 153);
+    string instructions = "Write the following line. Press 'D' when done. Press 'C' to start over.";
+    text_.drawString(instructions, 50, 80);
+    
+    ofSetColor(0, 153, 255);
+    string quote1 = "Part of the inhumanity of the computer is that, once it is competently programmed and working";
+    string quote2 = "smoothly, it is completely honest.";
+    text_.drawString(quote1, 50, 120);
+    text_.drawString(quote2, 50, 160);
+    
+    if (print_not_done_) {
+        ofSetColor(204, 0, 0);
+        string notdone = "Not enough data for analysis... Write some more!";
+        text_.drawString(notdone, 50, 200);
+    }
+    
+    ofApp::drawPaths();
+    ofApp::drawCursor();
+    
+    //strokes_.drawStrokes();
+}
+
+void ofApp::drawDisplayState() {
+    
 }
 
 //--------------------------------------------------------------

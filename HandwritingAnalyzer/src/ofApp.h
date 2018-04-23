@@ -4,21 +4,23 @@
 #include "ofxTablet.h"
 #include "strokes.h"
 
-enum AnalyzeState {
-    WRITE,
-    DISPLAY
+enum AnalysisState {
+    WRITE,  // User is writing, only change states when strokes has more than a certain number of lines
+    DISPLAY // Display personality to screen
 };
 
 class ofApp : public ofBaseApp {
 private:
     Strokes strokes_;
-
+    AnalysisState curr_state_ = WRITE;
+    bool print_not_done_ = false;
+    
     ofPath paths_;
-    float curr_pressure_;
+    float curr_pressure_ = 0;
     
     // flags to keep track of drawing state
-    bool isDrawing_;
-    bool wasDrawing_;
+    bool isDrawing_ = false;
+    bool wasDrawing_ = false;
     
     // stores background lines
     ofPath background_lines_; 
@@ -36,7 +38,9 @@ public:
     void update();
     void draw();
 
-    void drawBackground();
+    void drawDisplayState();
+    void drawWriteState();
+    void drawBackgroundLines();
     void drawCursor();
     void drawPaths();
     float strokeWidthFromPressure(const float& pressure);
