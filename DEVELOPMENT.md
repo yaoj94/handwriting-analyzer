@@ -25,8 +25,12 @@
   * Calculate connectedness by counting overlaps and subtracting from size of strokes rather than having separate variable to count both separately
   * Question: Store pressures in vector to calculate average of later or count number of points and add up pressures as the program goes?
   * Problem: If I write too fast, the points don't compare that quickly. i.e. crossing t's, a t would have connectedness of 2
+  * Problem: Needed data structure for all the factors in the handwriting
+  * Solution: Created a struct for one factor that contains a level and bounds to classify the factor. Created another struct for all of the factors used throughout the program.
+  * Need way to store attributes and descriptions!
 
 - [X] Implement methods to check whether or not the user wrote something before pressing done
   * Split up draw function to make draw method neater, added AnalysisState enum to switch between states - only changes if the number of strokes are around the number of words in the quote
 
 - [ ] Print personality characteristics to screen
+

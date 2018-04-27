@@ -4,12 +4,14 @@
 #include "ofxTablet.h"
 #include "strokes.h"
 
+namespace handwritinganalysis {
+
 enum AnalysisState {
     WRITE,  // User is writing, only change states when strokes has more than a certain number of lines
     DISPLAY // Display personality to screen
 };
 
-class ofApp : public ofBaseApp {
+class HandwritingAnalyzer : public ofBaseApp {
 private:
     Strokes strokes_;
     AnalysisState curr_state_ = WRITE;
@@ -58,3 +60,4 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 };
+}

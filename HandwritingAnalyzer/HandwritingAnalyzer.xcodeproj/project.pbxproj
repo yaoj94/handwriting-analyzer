@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B0F20902092CC390043A783 /* factors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B0F208E2092CC390043A783 /* factors.cpp */; };
 		3B53FFD720832457006BFDF5 /* strokes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B53FFD520832457006BFDF5 /* strokes.cpp */; };
+		3BB8FDAD208FA2D3000D4247 /* classifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BB8FDAB208FA2D3000D4247 /* classifier.cpp */; };
 		5C7C8A629EB7FEC788F4C35C /* ofxTablet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8297FE7AAEBE968C4D68A418 /* ofxTablet.cpp */; };
 		CD9B126862892D331D098F0D /* tabletCocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 04D8A5798C3502CF0133F67C /* tabletCocoa.mm */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
@@ -46,8 +48,12 @@
 
 /* Begin PBXFileReference section */
 		04D8A5798C3502CF0133F67C /* tabletCocoa.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; name = tabletCocoa.mm; path = ../../../../addons/ofxTablet/src/tabletCocoa.mm; sourceTree = SOURCE_ROOT; };
+		3B0F208E2092CC390043A783 /* factors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = factors.cpp; sourceTree = "<group>"; };
+		3B0F208F2092CC390043A783 /* factors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = factors.h; sourceTree = "<group>"; };
 		3B53FFD520832457006BFDF5 /* strokes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = strokes.cpp; sourceTree = "<group>"; };
 		3B53FFD620832457006BFDF5 /* strokes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = strokes.h; sourceTree = "<group>"; };
+		3BB8FDAB208FA2D3000D4247 /* classifier.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = classifier.cpp; sourceTree = "<group>"; };
+		3BB8FDAC208FA2D3000D4247 /* classifier.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = classifier.h; sourceTree = "<group>"; };
 		4BE2D0CAA70A158BD7131428 /* tabletCocoa.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = tabletCocoa.h; path = ../../../../addons/ofxTablet/src/tabletCocoa.h; sourceTree = SOURCE_ROOT; };
 		7838E501403ED789931F6BF6 /* tabletData.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = tabletData.h; path = ../../../../addons/ofxTablet/src/tabletData.h; sourceTree = SOURCE_ROOT; };
 		8297FE7AAEBE968C4D68A418 /* ofxTablet.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxTablet.cpp; path = ../../../../addons/ofxTablet/src/ofxTablet.cpp; sourceTree = SOURCE_ROOT; };
@@ -130,6 +136,10 @@
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
 				3B53FFD520832457006BFDF5 /* strokes.cpp */,
 				3B53FFD620832457006BFDF5 /* strokes.h */,
+				3BB8FDAB208FA2D3000D4247 /* classifier.cpp */,
+				3BB8FDAC208FA2D3000D4247 /* classifier.h */,
+				3B0F208E2092CC390043A783 /* factors.cpp */,
+				3B0F208F2092CC390043A783 /* factors.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -239,9 +249,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				3B53FFD720832457006BFDF5 /* strokes.cpp in Sources */,
+				3B0F20902092CC390043A783 /* factors.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				CD9B126862892D331D098F0D /* tabletCocoa.mm in Sources */,
+				3BB8FDAD208FA2D3000D4247 /* classifier.cpp in Sources */,
 				5C7C8A629EB7FEC788F4C35C /* ofxTablet.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

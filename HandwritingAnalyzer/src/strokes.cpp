@@ -1,12 +1,13 @@
 #include "strokes.h"
+using namespace handwritinganalysis;
 
 // Constructor that initializes member variables
-Strokes::Strokes() : avg_pressure_(0), letter_size_(0), speed_(0), connectedness_(0), left_margin_(0), right_margin_(0), perimeter_(0), total_time_millis_(0), reset_timer_(true), connected_points_(0),  leftmost_x_(ofGetWindowWidth()), rightmost_x_(0) {}
+Strokes::Strokes() : perimeter_(0), total_time_millis_(0), reset_timer_(true), connected_points_(0),  leftmost_x_(ofGetWindowWidth()), rightmost_x_(0) {}
 
 // This method is called when the user is drawing and a point needs to be added to the line.
 // Private variables are updated to keep track of the timer, margins, and connectedness value.
 // Input: ofPoint the point to add, float the pressure of the pen at that point
-void Strokes::AddPoint(const ofPoint& point, float& pressure) {
+void Strokes::AddPoint(const ofPoint& point, const float& pressure) {
     curr_stroke_.lineTo(point);
     pen_pressures_.push_back(pressure);
     
@@ -49,12 +50,7 @@ void Strokes::ResetStrokes() {
     curr_stroke_.clear();
     prev_stroke_.clear();
     
-    avg_pressure_ = 0;
-    letter_size_ = 0;
-    speed_ = 0;
-    connectedness_ = 0;
-    left_margin_ = 0;
-    right_margin_ = 0;
+    factors_.ClearData();
     
     pen_pressures_.clear();
     perimeter_ = 0;
@@ -121,44 +117,21 @@ uint Strokes::CalculateAverageSpeed() {
 
 // Sets variables that store analysis data to be called when user is done writing
 void Strokes::Analyze() {
-    letter_size_ = Strokes::CalculateAverageLetterSize();
-    
-    left_margin_ = leftmost_x_;
-    right_margin_ = ofGetWindowWidth() - rightmost_x_;
-    
     if (connected_points_ >= strokes_.size()) {
-        connectedness_ = 1;
+        factors_.connectedness_.data_ = 1;
     } else {
-        connectedness_ = strokes_.size() - connected_points_;
+        factors_.connectedness_.data_ = strokes_.size() - connected_points_;
     }
     
-    avg_pressure_ = Strokes::CalculateAveragePressure();
-    speed_ = Strokes::CalculateAverageSpeed();
+    factors_.pressure_.data_ = Strokes::CalculateAveragePressure();
+    factors_.size_.data_ = Strokes::CalculateAverageLetterSize();
+    factors_.speed_.data_ = Strokes::CalculateAverageSpeed();
+    factors_.left_margin_.data_ = leftmost_x_;
+    factors_.right_margin_.data_ = ofGetWindowWidth() - rightmost_x_;
 }
 
-// Accessor methods
-uint Strokes::GetPressure() {
-    return avg_pressure_;
-}
-
-uint Strokes::GetLetterSize() {
-    return letter_size_;
-}
-
-uint Strokes::GetSpeed() {
-    return speed_;
-}
-
-uint Strokes::GetConnectedness() {
-    return connectedness_;
-}
-
-uint Strokes::GetLeftMargin() {
-    return left_margin_;
-}
-
-uint Strokes::GetRightMargin() {
-    return right_margin_;
+HandwritingFactors& Strokes::GetFactors() {
+    return factors_;
 }
 
 uint Strokes::GetNumStrokes() {

@@ -1,8 +1,9 @@
 #include "ofApp.h"
 #include "ofxTablet.h"
+using namespace handwritinganalysis;
 
 // Set up window, paths, and tablet
-void ofApp::setup(){
+void HandwritingAnalyzer::setup(){
     ofSetWindowTitle("Handwriting Analyzer");
     ofBackground(0, 0, 0);
 
@@ -23,27 +24,55 @@ void ofApp::setup(){
     
     // from ofxTablet example code
     ofxTablet::start();
-    ofAddListener(ofxTablet::tabletEvent, this, &ofApp::tabletMoved);
+    ofAddListener(ofxTablet::tabletEvent, this, &HandwritingAnalyzer::tabletMoved);
     
 }
 
 //--------------------------------------------------------------
-void ofApp::update(){
+void HandwritingAnalyzer::update(){
 
 }
 
 // Draws background, instructions, and paths
-void ofApp::draw(){
+void HandwritingAnalyzer::draw(){
     if (curr_state_ == WRITE) {
-        ofApp::drawWriteState();
+        HandwritingAnalyzer::drawWriteState();
     } else {
-        
+        HandwritingAnalyzer::drawDisplayState();
     }
+}
+
+void HandwritingAnalyzer::drawWriteState() {
+    HandwritingAnalyzer::drawBackgroundLines();
+    
+    ofSetColor(0, 255, 153);
+    string instructions = "Write the following line. Press 'D' when done. Press 'C' to start over.";
+    text_.drawString(instructions, 50, 80);
+    
+    ofSetColor(0, 153, 255);
+    string quote1 = "Part of the inhumanity of the computer is that, once it is competently programmed and working";
+    string quote2 = "smoothly, it is completely honest.";
+    text_.drawString(quote1, 50, 120);
+    text_.drawString(quote2, 50, 160);
+    
+    if (print_not_done_) {
+        ofSetColor(204, 0, 0);
+        string notdone = "Not enough data for analysis... Write some more!";
+        text_.drawString(notdone, 50, 200);
+    }
+    
+    HandwritingAnalyzer::drawPaths();
+    HandwritingAnalyzer::drawCursor();
+    
+    //strokes_.drawStrokes();
+}
+
+void HandwritingAnalyzer::drawDisplayState() {
     
 }
 
 // Reads data from tablet once data is received and updates drawing state flags
-void ofApp::tabletMoved(TabletData &data) {
+void HandwritingAnalyzer::tabletMoved(TabletData &data) {
     curr_pressure_ = data.pressure * 100;
 
     // Change drawing flags based on pressure
@@ -85,7 +114,7 @@ void ofApp::tabletMoved(TabletData &data) {
 
 // 'D' Changes state when user is done
 // 'C' Clears strokes when user wants to start over
-void ofApp::keyPressed(int key){
+void HandwritingAnalyzer::keyPressed(int key){
     int upper_key = toupper(key);
     
     if (upper_key == 'D') {
@@ -93,13 +122,13 @@ void ofApp::keyPressed(int key){
         strokes_.Analyze();
         
         // Print out data for testing
-        std::cout << "Letter size: " << strokes_.GetLetterSize() << std::endl;
-        std::cout << "Left Margin: " << strokes_.GetLeftMargin() << std::endl;
-        std::cout << "Right Margin: " << strokes_.GetRightMargin() << std::endl;
+        std::cout << "Letter size: " << strokes_.GetFactors().size_.data_ << std::endl;
+        std::cout << "Left Margin: " << strokes_.GetFactors().left_margin_.data_ << std::endl;
+        std::cout << "Right Margin: " << strokes_.GetFactors().right_margin_.data_ << std::endl;
         std::cout << "Number of strokes: " << strokes_.GetNumStrokes() << std::endl;
-        std::cout << "Average speed: " << strokes_.GetSpeed() << std::endl;
-        std::cout << "Average pressure: " << strokes_.GetPressure() << std::endl;
-        std::cout << "Connectedness: " << strokes_.GetConnectedness() << std::endl;
+        std::cout << "Average speed: " << strokes_.GetFactors().speed_.data_ << std::endl;
+        std::cout << "Average pressure: " << strokes_.GetFactors().pressure_.data_ << std::endl;
+        std::cout << "Connectedness: " << strokes_.GetFactors().connectedness_.data_ << std::endl;
         std::cout << std::endl;
         
         if (strokes_.GetNumStrokes() <= 20) { // number of words
@@ -116,14 +145,14 @@ void ofApp::keyPressed(int key){
 }
 
 // Draws background lines
-void ofApp::drawBackgroundLines() {
+void HandwritingAnalyzer::drawBackgroundLines() {
     background_lines_.setStrokeWidth(1);
     background_lines_.setStrokeColor(ofColor(179, 236, 255));
     background_lines_.draw();
 }
 
 // Draws cursor wherever the pen is
-void ofApp::drawCursor() {
+void HandwritingAnalyzer::drawCursor() {
     ofSetColor(66, 179, 244);
     pen_cursor_.draw(ofxTablet::tabletData.abs_screen[0], ofxTablet::tabletData.abs_screen[1] - 45, 45, 45);
 
@@ -133,7 +162,7 @@ void ofApp::drawCursor() {
 }
 
 // Draws handwriting path to screen with set width and color
-void ofApp::drawPaths() {
+void HandwritingAnalyzer::drawPaths() {
     paths_.setStrokeWidth(2);
     paths_.setStrokeColor(ofColor(255, 255, 255));
     paths_.draw();
@@ -147,7 +176,7 @@ void ofApp::drawPaths() {
 }
 
 // Calculates the width of the stroke based on pressure
-float ofApp::strokeWidthFromPressure(const float& pressure) {
+float HandwritingAnalyzer::strokeWidthFromPressure(const float& pressure) {
     if (pressure >= 75) {
         return 7;
     } else if (pressure <= 5) {
@@ -157,81 +186,52 @@ float ofApp::strokeWidthFromPressure(const float& pressure) {
     }
 }
 
-void ofApp::drawWriteState() {
-    ofApp::drawBackgroundLines();
-    
-    ofSetColor(0, 255, 153);
-    string instructions = "Write the following line. Press 'D' when done. Press 'C' to start over.";
-    text_.drawString(instructions, 50, 80);
-    
-    ofSetColor(0, 153, 255);
-    string quote1 = "Part of the inhumanity of the computer is that, once it is competently programmed and working";
-    string quote2 = "smoothly, it is completely honest.";
-    text_.drawString(quote1, 50, 120);
-    text_.drawString(quote2, 50, 160);
-    
-    if (print_not_done_) {
-        ofSetColor(204, 0, 0);
-        string notdone = "Not enough data for analysis... Write some more!";
-        text_.drawString(notdone, 50, 200);
-    }
-    
-    ofApp::drawPaths();
-    ofApp::drawCursor();
-    
-    //strokes_.drawStrokes();
-}
-
-void ofApp::drawDisplayState() {
-    
-}
-
 //--------------------------------------------------------------
-void ofApp::keyReleased(int key){
+void HandwritingAnalyzer::keyReleased(int key){
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
+void HandwritingAnalyzer::mouseMoved(int x, int y ){
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
+void HandwritingAnalyzer::mouseDragged(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
+void HandwritingAnalyzer::mousePressed(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
+void HandwritingAnalyzer::mouseReleased(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y){
+void HandwritingAnalyzer::mouseEntered(int x, int y){
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y){
+void HandwritingAnalyzer::mouseExited(int x, int y){
 
 }
 
 //--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
+void HandwritingAnalyzer::windowResized(int w, int h){
 
 }
 
 //--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
+void HandwritingAnalyzer::gotMessage(ofMessage msg){
 
 }
 
 //--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
+void HandwritingAnalyzer::dragEvent(ofDragInfo dragInfo){ 
 
 }
