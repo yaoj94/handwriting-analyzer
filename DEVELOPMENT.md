@@ -39,5 +39,7 @@
   * Currently displays the characteristics as a list
 
 - [ ] Write tests for file IO and Classifier
+  * Problem: Tests don't run through XCode and it can't find ofMain.h file
+  * Solution: Copied the files and edited it so that the files don't depend on ofMain.h. Ran tests on CLion.
 
 
