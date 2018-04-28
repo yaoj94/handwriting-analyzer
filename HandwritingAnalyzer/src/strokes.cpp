@@ -50,8 +50,6 @@ void Strokes::ResetStrokes() {
     curr_stroke_.clear();
     prev_stroke_.clear();
     
-    factors_.ClearData();
-    
     pen_pressures_.clear();
     perimeter_ = 0;
     total_time_millis_ = 0;
@@ -116,22 +114,18 @@ uint Strokes::CalculateAverageSpeed() {
 }
 
 // Sets variables that store analysis data to be called when user is done writing
-void Strokes::Analyze() {
+void Strokes::Analyze(HandwritingFactors& factors) {
     if (connected_points_ >= strokes_.size()) {
-        factors_.connectedness_.data_ = 1;
+        factors.connectedness_.data_ = 1;
     } else {
-        factors_.connectedness_.data_ = strokes_.size() - connected_points_;
+        factors.connectedness_.data_ = strokes_.size() - connected_points_;
     }
     
-    factors_.pressure_.data_ = Strokes::CalculateAveragePressure();
-    factors_.size_.data_ = Strokes::CalculateAverageLetterSize();
-    factors_.speed_.data_ = Strokes::CalculateAverageSpeed();
-    factors_.left_margin_.data_ = leftmost_x_;
-    factors_.right_margin_.data_ = ofGetWindowWidth() - rightmost_x_;
-}
-
-HandwritingFactors& Strokes::GetFactors() {
-    return factors_;
+    factors.pressure_.data_ = Strokes::CalculateAveragePressure();
+    factors.size_.data_ = Strokes::CalculateAverageLetterSize();
+    factors.speed_.data_ = Strokes::CalculateAverageSpeed();
+    factors.left_margin_.data_ = leftmost_x_;
+    factors.right_margin_.data_ = ofGetWindowWidth() - rightmost_x_;
 }
 
 uint Strokes::GetNumStrokes() {

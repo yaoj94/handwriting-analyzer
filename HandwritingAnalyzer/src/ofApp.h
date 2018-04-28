@@ -3,6 +3,8 @@
 #include "ofMain.h"
 #include "ofxTablet.h"
 #include "strokes.h"
+#include "classifier.h"
+#include "factors.h"
 
 namespace handwritinganalysis {
 
@@ -13,6 +15,7 @@ enum AnalysisState {
 
 class HandwritingAnalyzer : public ofBaseApp {
 private:
+    Classifier classifier_;
     Strokes strokes_;
     AnalysisState curr_state_ = WRITE;
     bool print_not_done_ = false;
@@ -28,7 +31,9 @@ private:
     ofPath background_lines_; 
     
     ofImage pen_cursor_;
-    ofTrueTypeFont text_;
+    ofTrueTypeFont write_text_;
+    ofTrueTypeFont display_text_;
+    ofTrueTypeFont disclaimer_;
 
     /* map of ofPath to float
      ofPath keeps track of every move and associates a pressure to it

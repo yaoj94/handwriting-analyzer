@@ -16,9 +16,6 @@ private:
     ofPolyline curr_stroke_;
     ofPolyline prev_stroke_;
     
-    // store data for analysis
-    HandwritingFactors factors_;
-    
     // helper variables
     std::vector<float> pen_pressures_;
     double perimeter_;      // total length of the lines
@@ -44,7 +41,7 @@ private:
     
 public:
     Strokes();
-    
+        
     // This method is called when the user is drawing and a point needs to be added to the line.
     // Private variables are updated to keep track of the timer, margins, and connectedness value.
     // Input: ofPoint the point to add, float the pressure of the pen at that point
@@ -57,9 +54,9 @@ public:
     void ResetStrokes();
     
     // Sets variables that store analysis data to be called when user is done writing
-    void Analyze();
+    void Analyze(HandwritingFactors& factors);
     
-    HandwritingFactors& GetFactors();
+    //HandwritingFactors& GetFactors();
     
     // Returns size of strokes_
     uint GetNumStrokes();

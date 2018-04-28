@@ -4,14 +4,25 @@ using namespace handwritinganalysis;
 
 // Set up window, paths, and tablet
 void HandwritingAnalyzer::setup(){
+    classifier_.GetFactors().ReadAttributesFromFile("attributes");
+
+    /*
+    for (auto factor : classifier_.GetFactors().factors_array_) {
+        std::cout << factor->attribute_.description_low_ << std::endl;
+        std::cout << factor->attribute_.description_med_ << std::endl;
+        std::cout << factor->attribute_.description_high_ << std::endl;
+    }*/
+
     ofSetWindowTitle("Handwriting Analyzer");
     ofBackground(0, 0, 0);
 
     ofHideCursor();
     
-    pen_cursor_.load("/Users/Jenn/Documents/of_v0.9.8_osx_release/apps/myApps/final-project-yaoj94/HandwritingAnalyzer/data/pen.png");
+    pen_cursor_.load("pen.png");
     
-    text_.load("/Users/Jenn/Documents/of_v0.9.8_osx_release/apps/myApps/final-project-yaoj94/HandwritingAnalyzer/data/Century Gothic", 18);
+    write_text_.load("Century Gothic", 18);
+    display_text_.load("Century Gothic", 24);
+    disclaimer_.load("PrestigeEliteStd-Bd.otf", 8);
     
     paths_.setFilled(false); // don't fill paths
     background_lines_.setFilled(false);
@@ -47,18 +58,16 @@ void HandwritingAnalyzer::drawWriteState() {
     
     ofSetColor(0, 255, 153);
     string instructions = "Write the following line. Press 'D' when done. Press 'C' to start over.";
-    text_.drawString(instructions, 50, 80);
+    write_text_.drawString(instructions, 50, 80);
     
     ofSetColor(0, 153, 255);
-    string quote1 = "Part of the inhumanity of the computer is that, once it is competently programmed and working";
-    string quote2 = "smoothly, it is completely honest.";
-    text_.drawString(quote1, 50, 120);
-    text_.drawString(quote2, 50, 160);
+    string quote = "Part of the inhumanity of the computer is that, once it is competently programmed and working\nsmoothly, it is completely honest.";
+    write_text_.drawString(quote, 50, 120);
     
     if (print_not_done_) {
         ofSetColor(204, 0, 0);
         string notdone = "Not enough data for analysis... Write some more!";
-        text_.drawString(notdone, 50, 200);
+        write_text_.drawString(notdone, 50, 200);
     }
     
     HandwritingAnalyzer::drawPaths();
@@ -68,7 +77,19 @@ void HandwritingAnalyzer::drawWriteState() {
 }
 
 void HandwritingAnalyzer::drawDisplayState() {
+    ofSetColor(44, 165, 72);
+    string intro = "People with your handwriting style typically . . . ";
+    display_text_.drawString(intro, 50, 80);
     
+    int position = 150;
+    for (auto factor : classifier_.GetFactors().factors_array_) {
+        display_text_.drawString(factor->GetAttribute(), 80, position);
+        position += 70;
+    }
+    
+    ofSetColor(200, 200, 200);
+    string disclaimer = "Disclaimer: The results from this test are for entertainment purposes only and are not clinically proven. Use the information at your own risk.";
+    disclaimer_.drawString(disclaimer, 20, ofGetWindowHeight() - 20);
 }
 
 // Reads data from tablet once data is received and updates drawing state flags
@@ -117,30 +138,34 @@ void HandwritingAnalyzer::tabletMoved(TabletData &data) {
 void HandwritingAnalyzer::keyPressed(int key){
     int upper_key = toupper(key);
     
-    if (upper_key == 'D') {
-        // Done: analyse strokes, check for doneness, change states
-        strokes_.Analyze();
-        
-        // Print out data for testing
-        std::cout << "Letter size: " << strokes_.GetFactors().size_.data_ << std::endl;
-        std::cout << "Left Margin: " << strokes_.GetFactors().left_margin_.data_ << std::endl;
-        std::cout << "Right Margin: " << strokes_.GetFactors().right_margin_.data_ << std::endl;
-        std::cout << "Number of strokes: " << strokes_.GetNumStrokes() << std::endl;
-        std::cout << "Average speed: " << strokes_.GetFactors().speed_.data_ << std::endl;
-        std::cout << "Average pressure: " << strokes_.GetFactors().pressure_.data_ << std::endl;
-        std::cout << "Connectedness: " << strokes_.GetFactors().connectedness_.data_ << std::endl;
-        std::cout << std::endl;
-        
-        if (strokes_.GetNumStrokes() <= 20) { // number of words
-            print_not_done_ = true;
-        } else {
-            curr_state_ = DISPLAY;
+    if (curr_state_ == WRITE) {
+        if (upper_key == 'D') {
+            // Done: analyse strokes, check for doneness, change states
+            strokes_.Analyze(classifier_.GetFactors());
+            classifier_.Classify(21, 94);
+            
+            // Print out data for testing
+            std::cout << "Letter size: " << classifier_.GetFactors().size_.data_ << std::endl;
+            std::cout << "Left Margin: " << classifier_.GetFactors().left_margin_.data_ << std::endl;
+            std::cout << "Right Margin: " << classifier_.GetFactors().right_margin_.data_ << std::endl;
+            std::cout << "Number of strokes: " << strokes_.GetNumStrokes() << std::endl;
+            std::cout << "Average speed: " << classifier_.GetFactors().speed_.data_ << std::endl;
+            std::cout << "Average pressure: " << classifier_.GetFactors().pressure_.data_ << std::endl;
+            std::cout << "Connectedness: " << classifier_.GetFactors().connectedness_.data_ << std::endl;
+            std::cout << std::endl;
+            
+            if (strokes_.GetNumStrokes() <= 20) { // number of words
+                print_not_done_ = true;
+            } else {
+                curr_state_ = DISPLAY;
+            }
+
         }
-    }
-    if (upper_key == 'C') {
-        // Clear all paths
-        strokes_.ResetStrokes();
-        paths_.clear();
+        if (upper_key == 'C') {
+            // Clear all paths
+            strokes_.ResetStrokes();
+            paths_.clear();
+        }
     }
 }
 
@@ -153,12 +178,9 @@ void HandwritingAnalyzer::drawBackgroundLines() {
 
 // Draws cursor wherever the pen is
 void HandwritingAnalyzer::drawCursor() {
-    ofSetColor(66, 179, 244);
+    ofSetColor(170, 201, 224);
     pen_cursor_.draw(ofxTablet::tabletData.abs_screen[0], ofxTablet::tabletData.abs_screen[1] - 45, 45, 45);
 
-    // draw point to screen
-    //ofSetColor(0, 255, 153);
-    //ofDrawCircle(ofxTablet::tabletData.abs_screen[0], ofxTablet::tabletData.abs_screen[1], 2);
 }
 
 // Draws handwriting path to screen with set width and color

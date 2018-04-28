@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3B0F20902092CC390043A783 /* factors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B0F208E2092CC390043A783 /* factors.cpp */; };
 		3B53FFD720832457006BFDF5 /* strokes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B53FFD520832457006BFDF5 /* strokes.cpp */; };
+		3BB65A0E20941E6400F70F56 /* tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BB65A0A2093F97700F70F56 /* tests.cpp */; };
 		3BB8FDAD208FA2D3000D4247 /* classifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BB8FDAB208FA2D3000D4247 /* classifier.cpp */; };
 		5C7C8A629EB7FEC788F4C35C /* ofxTablet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8297FE7AAEBE968C4D68A418 /* ofxTablet.cpp */; };
 		CD9B126862892D331D098F0D /* tabletCocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 04D8A5798C3502CF0133F67C /* tabletCocoa.mm */; };
@@ -37,7 +38,7 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		E4C2427710CC5ABF004149E2 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
@@ -48,10 +49,13 @@
 
 /* Begin PBXFileReference section */
 		04D8A5798C3502CF0133F67C /* tabletCocoa.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; name = tabletCocoa.mm; path = ../../../../addons/ofxTablet/src/tabletCocoa.mm; sourceTree = SOURCE_ROOT; };
+		3B000EFA20941ECB0039926A /* catch.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = catch.hpp; sourceTree = "<group>"; };
 		3B0F208E2092CC390043A783 /* factors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = factors.cpp; sourceTree = "<group>"; };
 		3B0F208F2092CC390043A783 /* factors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = factors.h; sourceTree = "<group>"; };
 		3B53FFD520832457006BFDF5 /* strokes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = strokes.cpp; sourceTree = "<group>"; };
 		3B53FFD620832457006BFDF5 /* strokes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = strokes.h; sourceTree = "<group>"; };
+		3BB65A0A2093F97700F70F56 /* tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tests.cpp; sourceTree = "<group>"; };
+		3BB65A0B2093F97700F70F56 /* tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tests.h; sourceTree = "<group>"; };
 		3BB8FDAB208FA2D3000D4247 /* classifier.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = classifier.cpp; sourceTree = "<group>"; };
 		3BB8FDAC208FA2D3000D4247 /* classifier.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = classifier.h; sourceTree = "<group>"; };
 		4BE2D0CAA70A158BD7131428 /* tabletCocoa.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = tabletCocoa.h; path = ../../../../addons/ofxTablet/src/tabletCocoa.h; sourceTree = SOURCE_ROOT; };
@@ -80,6 +84,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3BB65A092093F95A00F70F56 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				3B000EFA20941ECB0039926A /* catch.hpp */,
+				3BB65A0A2093F97700F70F56 /* tests.cpp */,
+				3BB65A0B2093F97700F70F56 /* tests.h */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
 		6948EE371B920CB800B5AC1A /* local_addons */ = {
 			isa = PBXGroup;
 			children = (
@@ -118,6 +132,7 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
+				3BB65A092093F95A00F70F56 /* test */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
@@ -170,8 +185,9 @@
 			buildPhases = (
 				E4B69B580A3A1756003C02F2 /* Sources */,
 				E4B69B590A3A1756003C02F2 /* Frameworks */,
-				E4B6FFFD0C3F9AB9008CF71C /* ShellScript */,
+				E4B6FFFD0C3F9AB9008CF71C /* Run Script */,
 				E4C2427710CC5ABF004149E2 /* CopyFiles */,
+				3B000F09209433710039926A /* Resources */,
 			);
 			buildRules = (
 			);
@@ -227,14 +243,25 @@
 		};
 /* End PBXReferenceProxy section */
 
+/* Begin PBXResourcesBuildPhase section */
+		3B000F09209433710039926A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXShellScriptBuildPhase section */
-		E4B6FFFD0C3F9AB9008CF71C /* ShellScript */ = {
+		E4B6FFFD0C3F9AB9008CF71C /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Run Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -253,6 +280,7 @@
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				CD9B126862892D331D098F0D /* tabletCocoa.mm in Sources */,
+				3BB65A0E20941E6400F70F56 /* tests.cpp in Sources */,
 				3BB8FDAD208FA2D3000D4247 /* classifier.cpp in Sources */,
 				5C7C8A629EB7FEC788F4C35C /* ofxTablet.cpp in Sources */,
 			);

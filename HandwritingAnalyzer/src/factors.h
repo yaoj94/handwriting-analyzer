@@ -7,25 +7,37 @@
 namespace handwritinganalysis {
 
 enum Level {
-    LOW,
+    LOW = 0,
     MED,
     HIGH
 };
+    
+struct Attribute {
+    Attribute() {};
+    std::string description_high_;
+    std::string description_med_;
+    std::string description_low_;
+};
 
 struct Factor {
-    Factor() {}
+    Factor() {};
     
     uint middle_bound_;
     uint lower_bound_;
     uint data_;
     
     Level level_;
+    Attribute attribute_;
     
     void CalculateLevel();
+    std::string GetAttribute();
 };
 
 struct HandwritingFactors {
-    HandwritingFactors() {};
+    HandwritingFactors();
+    
+    // create array that points to all the factors to loop through
+    std::array<Factor*, 6> factors_array_;
     
     Factor pressure_;       // ranges from 1 - 100 but typical handwriting is probably from ~30 - 70
     Factor size_;           // ranges from ~10 - 50
@@ -38,7 +50,10 @@ struct HandwritingFactors {
     Factor right_margin_;
     
     void ClearData();
+    void ReadAttributesFromFile(std::string filename);
 };
+    
+    
     
 } // namespace handwritinganalysis
 
