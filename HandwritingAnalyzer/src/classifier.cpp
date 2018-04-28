@@ -19,12 +19,12 @@ void Classifier::SetBounds() {
     factors_.size_.lower_bound_ = kSizeLow;
     factors_.speed_.middle_bound_ = kSpeedMid;
     factors_.speed_.lower_bound_ = kSpeedLow;
-    factors_.connectedness_.middle_bound_ = num_letters_ / 1.2;
-    factors_.connectedness_.lower_bound_ = num_words_ * 1.5;
-    factors_.left_margin_.middle_bound_ = ofGetWindowWidth() / 10;
-    factors_.left_margin_.lower_bound_ = ofGetWindowWidth() / 20;
-    factors_.right_margin_.middle_bound_ = ofGetWindowWidth() / 10;
-    factors_.right_margin_.lower_bound_ = ofGetWindowWidth() / 20;
+    factors_.connectedness_.middle_bound_ = uint(num_letters_ / 1.2);
+    factors_.connectedness_.lower_bound_ = uint(num_words_ * 1.5);
+    factors_.left_margin_.middle_bound_ = kMarginsMid;
+    factors_.left_margin_.lower_bound_ = kMarginsLow;
+    factors_.right_margin_.middle_bound_ = kMarginsMid;
+    factors_.right_margin_.lower_bound_ = kMarginsLow;
 }
 
 HandwritingFactors& Classifier::GetFactors() {

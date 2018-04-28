@@ -5,6 +5,7 @@
 #include "strokes.h"
 #include "classifier.h"
 #include "factors.h"
+#include "ofxAVString.h"
 
 namespace handwritinganalysis {
 
@@ -34,7 +35,12 @@ private:
     ofTrueTypeFont write_text_;
     ofTrueTypeFont display_text_;
     ofTrueTypeFont disclaimer_;
-
+    ofTrueTypeFont attribute_text_;
+    ofxAVString avs_;
+    
+    uint64_t last_update_time_ = 0;
+    int factor_index_ = 0;
+    
     /* map of ofPath to float
      ofPath keeps track of every move and associates a pressure to it
     std::unordered_map<float, ofPath> pressure_paths_;

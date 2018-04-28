@@ -7,11 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3B0F20902092CC390043A783 /* factors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B0F208E2092CC390043A783 /* factors.cpp */; };
-		3B53FFD720832457006BFDF5 /* strokes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B53FFD520832457006BFDF5 /* strokes.cpp */; };
-		3BB65A0E20941E6400F70F56 /* tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BB65A0A2093F97700F70F56 /* tests.cpp */; };
-		3BB8FDAD208FA2D3000D4247 /* classifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BB8FDAB208FA2D3000D4247 /* classifier.cpp */; };
+		5BF810EE558DBE8720323EEC /* strokes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1C20CBE4DA520F9A0768B759 /* strokes.cpp */; };
 		5C7C8A629EB7FEC788F4C35C /* ofxTablet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8297FE7AAEBE968C4D68A418 /* ofxTablet.cpp */; };
+		780AC983A28E7BD779FDBA96 /* factors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AA61F0C827FCBD42666A9C /* factors.cpp */; };
+		A05D13DD3CECD82F8A2A0451 /* classifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A81B21EF62C7BCAE37330CAF /* classifier.cpp */; };
 		CD9B126862892D331D098F0D /* tabletCocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 04D8A5798C3502CF0133F67C /* tabletCocoa.mm */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
@@ -38,7 +37,7 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		E4C2427710CC5ABF004149E2 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 12;
+			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
@@ -49,19 +48,17 @@
 
 /* Begin PBXFileReference section */
 		04D8A5798C3502CF0133F67C /* tabletCocoa.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; name = tabletCocoa.mm; path = ../../../../addons/ofxTablet/src/tabletCocoa.mm; sourceTree = SOURCE_ROOT; };
-		3B000EFA20941ECB0039926A /* catch.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = catch.hpp; sourceTree = "<group>"; };
-		3B0F208E2092CC390043A783 /* factors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = factors.cpp; sourceTree = "<group>"; };
-		3B0F208F2092CC390043A783 /* factors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = factors.h; sourceTree = "<group>"; };
-		3B53FFD520832457006BFDF5 /* strokes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = strokes.cpp; sourceTree = "<group>"; };
-		3B53FFD620832457006BFDF5 /* strokes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = strokes.h; sourceTree = "<group>"; };
-		3BB65A0A2093F97700F70F56 /* tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tests.cpp; sourceTree = "<group>"; };
-		3BB65A0B2093F97700F70F56 /* tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tests.h; sourceTree = "<group>"; };
-		3BB8FDAB208FA2D3000D4247 /* classifier.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = classifier.cpp; sourceTree = "<group>"; };
-		3BB8FDAC208FA2D3000D4247 /* classifier.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = classifier.h; sourceTree = "<group>"; };
+		1C20CBE4DA520F9A0768B759 /* strokes.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = strokes.cpp; path = src/strokes.cpp; sourceTree = SOURCE_ROOT; };
+		27D686DB4E150382534D83EC /* classifier.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = classifier.h; path = src/classifier.h; sourceTree = SOURCE_ROOT; };
 		4BE2D0CAA70A158BD7131428 /* tabletCocoa.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = tabletCocoa.h; path = ../../../../addons/ofxTablet/src/tabletCocoa.h; sourceTree = SOURCE_ROOT; };
+		6FB0A05DA0C95B2BD12CFC1D /* factors.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = factors.h; path = src/factors.h; sourceTree = SOURCE_ROOT; };
 		7838E501403ED789931F6BF6 /* tabletData.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = tabletData.h; path = ../../../../addons/ofxTablet/src/tabletData.h; sourceTree = SOURCE_ROOT; };
 		8297FE7AAEBE968C4D68A418 /* ofxTablet.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxTablet.cpp; path = ../../../../addons/ofxTablet/src/ofxTablet.cpp; sourceTree = SOURCE_ROOT; };
+		A752EF947848504F40EBD479 /* strokes.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = strokes.h; path = src/strokes.h; sourceTree = SOURCE_ROOT; };
+		A81B21EF62C7BCAE37330CAF /* classifier.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = classifier.cpp; path = src/classifier.cpp; sourceTree = SOURCE_ROOT; };
 		D18DA866C240F475A60E3C51 /* ofxTablet.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxTablet.h; path = ../../../../addons/ofxTablet/src/ofxTablet.h; sourceTree = SOURCE_ROOT; };
+		D9AA61F0C827FCBD42666A9C /* factors.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = factors.cpp; path = src/factors.cpp; sourceTree = SOURCE_ROOT; };
+		DA5FAC05898BC2E3E2CAB81D /* ofxAVString.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAVString.h; path = ofxAVString/src/ofxAVString.h; sourceTree = SOURCE_ROOT; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E4B69B5B0A3A1756003C02F2 /* HandwritingAnalyzerDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HandwritingAnalyzerDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B69E1D0A3A1BDC003C02F2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
@@ -84,21 +81,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3BB65A092093F95A00F70F56 /* test */ = {
+		559A09374A9CE511A461C676 /* ofxAVString */ = {
 			isa = PBXGroup;
 			children = (
-				3B000EFA20941ECB0039926A /* catch.hpp */,
-				3BB65A0A2093F97700F70F56 /* tests.cpp */,
-				3BB65A0B2093F97700F70F56 /* tests.h */,
+				B4E7232B9DEE443FA9E57310 /* src */,
 			);
-			path = test;
-			sourceTree = "<group>";
-		};
-		6948EE371B920CB800B5AC1A /* local_addons */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = local_addons;
+			name = ofxAVString;
 			sourceTree = "<group>";
 		};
 		88F1833860A1CE3288861DF1 /* src */ = {
@@ -113,9 +101,18 @@
 			name = src;
 			sourceTree = "<group>";
 		};
+		B4E7232B9DEE443FA9E57310 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				DA5FAC05898BC2E3E2CAB81D /* ofxAVString.h */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				559A09374A9CE511A461C676 /* ofxAVString */,
 				E665C36C50EDBD7C9F8CE1A2 /* ofxTablet */,
 			);
 			name = addons;
@@ -132,13 +129,11 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
-				3BB65A092093F95A00F70F56 /* test */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
-				6948EE371B920CB800B5AC1A /* local_addons */,
 				E4B69B5B0A3A1756003C02F2 /* HandwritingAnalyzerDebug.app */,
 			);
 			sourceTree = "<group>";
@@ -149,12 +144,12 @@
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
-				3B53FFD520832457006BFDF5 /* strokes.cpp */,
-				3B53FFD620832457006BFDF5 /* strokes.h */,
-				3BB8FDAB208FA2D3000D4247 /* classifier.cpp */,
-				3BB8FDAC208FA2D3000D4247 /* classifier.h */,
-				3B0F208E2092CC390043A783 /* factors.cpp */,
-				3B0F208F2092CC390043A783 /* factors.h */,
+				D9AA61F0C827FCBD42666A9C /* factors.cpp */,
+				A81B21EF62C7BCAE37330CAF /* classifier.cpp */,
+				A752EF947848504F40EBD479 /* strokes.h */,
+				1C20CBE4DA520F9A0768B759 /* strokes.cpp */,
+				27D686DB4E150382534D83EC /* classifier.h */,
+				6FB0A05DA0C95B2BD12CFC1D /* factors.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -185,9 +180,8 @@
 			buildPhases = (
 				E4B69B580A3A1756003C02F2 /* Sources */,
 				E4B69B590A3A1756003C02F2 /* Frameworks */,
-				E4B6FFFD0C3F9AB9008CF71C /* Run Script */,
+				E4B6FFFD0C3F9AB9008CF71C /* ShellScript */,
 				E4C2427710CC5ABF004149E2 /* CopyFiles */,
-				3B000F09209433710039926A /* Resources */,
 			);
 			buildRules = (
 			);
@@ -243,25 +237,14 @@
 		};
 /* End PBXReferenceProxy section */
 
-/* Begin PBXResourcesBuildPhase section */
-		3B000F09209433710039926A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
-
 /* Begin PBXShellScriptBuildPhase section */
-		E4B6FFFD0C3F9AB9008CF71C /* Run Script */ = {
+		E4B6FFFD0C3F9AB9008CF71C /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Run Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -275,13 +258,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3B53FFD720832457006BFDF5 /* strokes.cpp in Sources */,
-				3B0F20902092CC390043A783 /* factors.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
+				780AC983A28E7BD779FDBA96 /* factors.cpp in Sources */,
+				A05D13DD3CECD82F8A2A0451 /* classifier.cpp in Sources */,
+				5BF810EE558DBE8720323EEC /* strokes.cpp in Sources */,
 				CD9B126862892D331D098F0D /* tabletCocoa.mm in Sources */,
-				3BB65A0E20941E6400F70F56 /* tests.cpp in Sources */,
-				3BB8FDAD208FA2D3000D4247 /* classifier.cpp in Sources */,
 				5C7C8A629EB7FEC788F4C35C /* ofxTablet.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -318,6 +300,8 @@
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(OF_CORE_HEADERS)",
+					src,
+					ofxAVString/src,
 					../../../../addons/ofxTablet/src,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
@@ -352,6 +336,8 @@
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(OF_CORE_HEADERS)",
+					src,
+					ofxAVString/src,
 					../../../../addons/ofxTablet/src,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
@@ -379,6 +365,8 @@
 				GCC_MODEL_TUNING = NONE;
 				HEADER_SEARCH_PATHS = (
 					"$(OF_CORE_HEADERS)",
+					src,
+					ofxAVString/src,
 					../../../../addons/ofxTablet/src,
 				);
 				ICON = "$(ICON_NAME_DEBUG)";
@@ -406,6 +394,8 @@
 				GCC_MODEL_TUNING = NONE;
 				HEADER_SEARCH_PATHS = (
 					"$(OF_CORE_HEADERS)",
+					src,
+					ofxAVString/src,
 					../../../../addons/ofxTablet/src,
 				);
 				ICON = "$(ICON_NAME_RELEASE)";

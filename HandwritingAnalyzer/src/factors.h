@@ -39,9 +39,9 @@ struct HandwritingFactors {
     // create array that points to all the factors to loop through
     std::array<Factor*, 6> factors_array_;
     
-    Factor pressure_;       // ranges from 1 - 100 but typical handwriting is probably from ~30 - 70
-    Factor size_;           // ranges from ~10 - 50
-    Factor speed_;          // ranges from ~10 - 30
+    Factor pressure_;       
+    Factor size_;           
+    Factor speed_;          
     Factor connectedness_;  // ranges from number of words to number of letters
                                 // there are 2 ways for handwriting to be connected
                                 // 1. writing in cursive or with few lifts

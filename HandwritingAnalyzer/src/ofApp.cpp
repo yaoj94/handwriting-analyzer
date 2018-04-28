@@ -21,7 +21,8 @@ void HandwritingAnalyzer::setup(){
     pen_cursor_.load("pen.png");
     
     write_text_.load("Century Gothic", 18);
-    display_text_.load("Century Gothic", 24);
+    display_text_.load("Gabriola.ttf", 30);
+    attribute_text_.load("Gabriola.ttf", 45);
     disclaimer_.load("PrestigeEliteStd-Bd.otf", 8);
     
     paths_.setFilled(false); // don't fill paths
@@ -41,7 +42,15 @@ void HandwritingAnalyzer::setup(){
 
 //--------------------------------------------------------------
 void HandwritingAnalyzer::update(){
-
+    if (curr_state_ == DISPLAY && ofGetElapsedTimeMillis() - last_update_time_ >= 3000) {
+        avs_.setup(classifier_.GetFactors().factors_array_[factor_index_]->GetAttribute());
+        avs_.play(5, 1000);
+        last_update_time_ = ofGetElapsedTimeMillis();
+        factor_index_++;
+        if (factor_index_ >= 6) {
+            factor_index_ = 0;
+        }
+    }
 }
 
 // Draws background, instructions, and paths
@@ -77,15 +86,19 @@ void HandwritingAnalyzer::drawWriteState() {
 }
 
 void HandwritingAnalyzer::drawDisplayState() {
-    ofSetColor(44, 165, 72);
+    ofSetColor(153, 102, 255);
     string intro = "People with your handwriting style typically . . . ";
-    display_text_.drawString(intro, 50, 80);
+    display_text_.drawString(intro, 100, 80);
     
+    ofSetColor(204, 255, 102);
+    attribute_text_.drawString(avs_, 75, ofGetWindowHeight() / 2);
+    
+    /*
     int position = 150;
     for (auto factor : classifier_.GetFactors().factors_array_) {
         display_text_.drawString(factor->GetAttribute(), 80, position);
         position += 70;
-    }
+    }*/
     
     ofSetColor(200, 200, 200);
     string disclaimer = "Disclaimer: The results from this test are for entertainment purposes only and are not clinically proven. Use the information at your own risk.";
