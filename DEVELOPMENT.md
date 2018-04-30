@@ -7,6 +7,7 @@
 
 - [X] Draw background
   * Changed background lines from vector of ofPolyline to a single ofPath object
+  * Made a Quote object to keep track of the quote, number of words, and letters that get called throughout files
 
 - [X] Draw strokes to screen
   * Successfully draws lines as pen moves
@@ -37,8 +38,9 @@
   * Problem: couldn't call the constructor of other classes in the ofApp header
   * Solution: have a setup method in the classes to initialize member variables - removed because I decided Classifier should contain the Factors since it is most directly related to the classifying
   * Currently displays the characteristics as a list
+  * Added ofxAVString to display text in a cooler way
 
-- [ ] Write tests for file IO and Classifier
+- [X] Write tests for file IO and Classifier
   * Problem: Tests don't run through XCode and it can't find ofMain.h file
   * Solution: Copied the files and edited it so that the files don't depend on ofMain.h. Ran tests on CLion.
 

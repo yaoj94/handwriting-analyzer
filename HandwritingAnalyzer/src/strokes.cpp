@@ -116,16 +116,16 @@ uint Strokes::CalculateAverageSpeed() {
 // Sets variables that store analysis data to be called when user is done writing
 void Strokes::Analyze(HandwritingFactors& factors) {
     if (connected_points_ >= strokes_.size()) {
-        factors.connectedness_.data_ = 1;
+        factors.connectedness.data = 1;
     } else {
-        factors.connectedness_.data_ = strokes_.size() - connected_points_;
+        factors.connectedness.data = strokes_.size() - connected_points_;
     }
     
-    factors.pressure_.data_ = Strokes::CalculateAveragePressure();
-    factors.size_.data_ = Strokes::CalculateAverageLetterSize();
-    factors.speed_.data_ = Strokes::CalculateAverageSpeed();
-    factors.left_margin_.data_ = leftmost_x_;
-    factors.right_margin_.data_ = ofGetWindowWidth() - rightmost_x_;
+    factors.pressure.data = Strokes::CalculateAveragePressure();
+    factors.size.data = Strokes::CalculateAverageLetterSize();
+    factors.speed.data = Strokes::CalculateAverageSpeed();
+    factors.left_margin.data = leftmost_x_;
+    factors.right_margin.data = ofGetWindowWidth() - rightmost_x_;
 }
 
 uint Strokes::GetNumStrokes() {

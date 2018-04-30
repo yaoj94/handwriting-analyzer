@@ -55,9 +55,7 @@ public:
     
     // Sets variables that store analysis data to be called when user is done writing
     void Analyze(HandwritingFactors& factors);
-    
-    //HandwritingFactors& GetFactors();
-    
+        
     // Returns size of strokes_
     uint GetNumStrokes();
 

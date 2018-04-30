@@ -5,6 +5,7 @@
 #include "strokes.h"
 #include "classifier.h"
 #include "factors.h"
+#include "quote.h"
 #include "ofxAVString.h"
 
 namespace handwritinganalysis {
@@ -16,6 +17,9 @@ enum AnalysisState {
 
 class HandwritingAnalyzer : public ofBaseApp {
 private:
+    const int kPenImageSize = 45;
+    
+    Quote quote_;
     Classifier classifier_;
     Strokes strokes_;
     AnalysisState curr_state_ = WRITE;

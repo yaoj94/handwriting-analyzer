@@ -3,9 +3,13 @@
 
 #include <stdio.h>
 #include "factors.h"
+#include "quote.h"
+
+#define MARGINMIDFACTOR 0.125
+#define MARGINLOWFACTOR 0.05
 
 namespace handwritinganalysis {
-    
+
 class Classifier {
 private:
     // ranges from 1 - 100 but typical handwriting is probably from ~30 - 70
@@ -20,8 +24,8 @@ private:
     const uint kSpeedMid = 25;
     const uint kSpeedLow = 15;
     
-    const uint kMarginsMid = ofGetWindowWidth() / 8;
-    const uint kMarginsLow = ofGetWindowWidth() / 20;
+    const uint kMarginsMid = ofGetWindowWidth() * MARGINMIDFACTOR;
+    const uint kMarginsLow = ofGetWindowWidth() * MARGINLOWFACTOR;
     
     HandwritingFactors factors_;
     uint num_words_;
@@ -29,8 +33,8 @@ private:
     
 public:
     Classifier();
-    void Classify(uint words, uint letters);
-    void SetBounds();
+    void Classify(Quote& quote);
+    void SetBounds(Quote& quote);
     HandwritingFactors& GetFactors();
 };
     

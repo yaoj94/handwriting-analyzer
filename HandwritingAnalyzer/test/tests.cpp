@@ -98,3 +98,43 @@ TEST_CASE("Classifier outputs correct Attribute") {
         REQUIRE(classifier.GetFactors().right_margin_.GetAttribute() == kRMarginDescriptionHigh);
     }
 }
+
+TEST_CASE("Quote object is set correctly") {
+    Quote quote;
+
+    SECTION("Empty strings") {
+        quote.Setup("");
+        REQUIRE(quote.GetNumWords() == 0);
+        REQUIRE(quote.GetNumLetters() == 0);
+    }
+
+    SECTION("Leading spaces") {
+        quote.Setup(" This is to test leading spaces.");
+        REQUIRE(quote.GetNumWords() == 6);
+        REQUIRE(quote.GetNumLetters() == 25);
+    }
+
+    SECTION("Trailing spaces") {
+        quote.Setup("This is to test trailing spaces.  ");
+        REQUIRE(quote.GetNumWords() == 6);
+        REQUIRE(quote.GetNumLetters() == 26);
+    }
+
+    SECTION("Multiple spacing") {
+        quote.Setup("  This is  to test   multiple   spacing.   ");
+        REQUIRE(quote.GetNumWords() == 6);
+        REQUIRE(quote.GetNumLetters() == 27);
+    }
+
+    SECTION("Escape sequences") {
+        quote.Setup("This is to test\ttabs and\nnew lines.");
+        REQUIRE(quote.GetNumWords() == 8);
+        REQUIRE(quote.GetNumLetters() == 27);
+    }
+
+    SECTION("Normal case") {
+        quote.Setup("This is to test a normal sentence.");
+        REQUIRE(quote.GetNumWords() == 7);
+        REQUIRE(quote.GetNumLetters() == 27);
+    }
+}

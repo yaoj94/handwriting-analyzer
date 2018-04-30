@@ -14,46 +14,44 @@ enum Level {
     
 struct Attribute {
     Attribute() {};
-    std::string description_high_;
-    std::string description_med_;
-    std::string description_low_;
+    std::string description_high;
+    std::string description_med;
+    std::string description_low;
 };
 
 struct Factor {
     Factor() {};
     
-    uint middle_bound_;
-    uint lower_bound_;
-    uint data_;
+    uint middle_bound;
+    uint lower_bound;
+    uint data;
     
-    Level level_;
-    Attribute attribute_;
+    Level level;
+    Attribute attribute;
     
     void CalculateLevel();
-    std::string GetAttribute();
+    const std::string& GetAttribute();
 };
 
 struct HandwritingFactors {
     HandwritingFactors();
     
     // create array that points to all the factors to loop through
-    std::array<Factor*, 6> factors_array_;
+    std::array<Factor*, 6> factors_array;
     
-    Factor pressure_;       
-    Factor size_;           
-    Factor speed_;          
-    Factor connectedness_;  // ranges from number of words to number of letters
+    Factor pressure;       
+    Factor size;           
+    Factor speed;          
+    Factor connectedness;  // ranges from number of words to number of letters
                                 // there are 2 ways for handwriting to be connected
                                 // 1. writing in cursive or with few lifts
                                 // 2. writing so close together that the letters intersect
-    Factor left_margin_;
-    Factor right_margin_;
+    Factor left_margin;
+    Factor right_margin;
     
     void ClearData();
     void ReadAttributesFromFile(std::string filename);
 };
-    
-    
     
 } // namespace handwritinganalysis
 

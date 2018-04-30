@@ -1,30 +1,31 @@
 #include "classifier.h"
 using namespace handwritinganalysis;
 
+#define WORDSFACTOR 1.5
+#define LETTERSFACTOR 0.8
+
 Classifier::Classifier() {};
 
-void Classifier::Classify(uint words, uint letters) {
-    num_words_ = words;
-    num_letters_ = letters;
-    SetBounds();
-    for (auto factor : factors_.factors_array_) {
+void Classifier::Classify(Quote& quote) {
+    SetBounds(quote);
+    for (auto factor : factors_.factors_array) {
         factor->CalculateLevel();
     }
 }
 
-void Classifier::SetBounds() {
-    factors_.pressure_.middle_bound_ = kPressureMid;
-    factors_.pressure_.lower_bound_ = kPressureLow;
-    factors_.size_.middle_bound_ = kSizeMid;
-    factors_.size_.lower_bound_ = kSizeLow;
-    factors_.speed_.middle_bound_ = kSpeedMid;
-    factors_.speed_.lower_bound_ = kSpeedLow;
-    factors_.connectedness_.middle_bound_ = uint(num_letters_ / 1.2);
-    factors_.connectedness_.lower_bound_ = uint(num_words_ * 1.5);
-    factors_.left_margin_.middle_bound_ = kMarginsMid;
-    factors_.left_margin_.lower_bound_ = kMarginsLow;
-    factors_.right_margin_.middle_bound_ = kMarginsMid;
-    factors_.right_margin_.lower_bound_ = kMarginsLow;
+void Classifier::SetBounds(Quote& quote) {
+    factors_.pressure.middle_bound = kPressureMid;
+    factors_.pressure.lower_bound = kPressureLow;
+    factors_.size.middle_bound = kSizeMid;
+    factors_.size.lower_bound = kSizeLow;
+    factors_.speed.middle_bound = kSpeedMid;
+    factors_.speed.lower_bound = kSpeedLow;
+    factors_.connectedness.middle_bound = uint(quote.GetNumLetters() * LETTERSFACTOR);
+    factors_.connectedness.lower_bound = uint(quote.GetNumWords() * WORDSFACTOR);
+    factors_.left_margin.middle_bound = kMarginsMid;
+    factors_.left_margin.lower_bound = kMarginsLow;
+    factors_.right_margin.middle_bound = kMarginsMid;
+    factors_.right_margin.lower_bound = kMarginsLow;
 }
 
 HandwritingFactors& Classifier::GetFactors() {

@@ -5,6 +5,7 @@ using namespace handwritinganalysis;
 // Set up window, paths, and tablet
 void HandwritingAnalyzer::setup(){
     classifier_.GetFactors().ReadAttributesFromFile("attributes");
+    quote_.Setup("Part of the inhumanity of the computer is that, once it is competently programmed and working\nsmoothly, it is completely honest.");
 
     /*
     for (auto factor : classifier_.GetFactors().factors_array_) {
@@ -19,7 +20,6 @@ void HandwritingAnalyzer::setup(){
     ofHideCursor();
     
     pen_cursor_.load("pen.png");
-    
     write_text_.load("Century Gothic", 18);
     display_text_.load("Gabriola.ttf", 30);
     attribute_text_.load("Gabriola.ttf", 45);
@@ -43,7 +43,7 @@ void HandwritingAnalyzer::setup(){
 //--------------------------------------------------------------
 void HandwritingAnalyzer::update(){
     if (curr_state_ == DISPLAY && ofGetElapsedTimeMillis() - last_update_time_ >= 3000) {
-        avs_.setup(classifier_.GetFactors().factors_array_[factor_index_]->GetAttribute());
+        avs_.setup(classifier_.GetFactors().factors_array[factor_index_]->GetAttribute());
         avs_.play(5, 1000);
         last_update_time_ = ofGetElapsedTimeMillis();
         factor_index_++;
@@ -70,8 +70,7 @@ void HandwritingAnalyzer::drawWriteState() {
     write_text_.drawString(instructions, 50, 80);
     
     ofSetColor(0, 153, 255);
-    string quote = "Part of the inhumanity of the computer is that, once it is competently programmed and working\nsmoothly, it is completely honest.";
-    write_text_.drawString(quote, 50, 120);
+    write_text_.drawString(quote_.GetQuote(), 50, 120);
     
     if (print_not_done_) {
         ofSetColor(204, 0, 0);
@@ -155,19 +154,19 @@ void HandwritingAnalyzer::keyPressed(int key){
         if (upper_key == 'D') {
             // Done: analyse strokes, check for doneness, change states
             strokes_.Analyze(classifier_.GetFactors());
-            classifier_.Classify(21, 94);
+            classifier_.Classify(quote_);
             
             // Print out data for testing
-            std::cout << "Letter size: " << classifier_.GetFactors().size_.data_ << std::endl;
-            std::cout << "Left Margin: " << classifier_.GetFactors().left_margin_.data_ << std::endl;
-            std::cout << "Right Margin: " << classifier_.GetFactors().right_margin_.data_ << std::endl;
+            std::cout << "Letter size: " << classifier_.GetFactors().size.data << std::endl;
+            std::cout << "Left Margin: " << classifier_.GetFactors().left_margin.data << std::endl;
+            std::cout << "Right Margin: " << classifier_.GetFactors().right_margin.data << std::endl;
             std::cout << "Number of strokes: " << strokes_.GetNumStrokes() << std::endl;
-            std::cout << "Average speed: " << classifier_.GetFactors().speed_.data_ << std::endl;
-            std::cout << "Average pressure: " << classifier_.GetFactors().pressure_.data_ << std::endl;
-            std::cout << "Connectedness: " << classifier_.GetFactors().connectedness_.data_ << std::endl;
+            std::cout << "Average speed: " << classifier_.GetFactors().speed.data << std::endl;
+            std::cout << "Average pressure: " << classifier_.GetFactors().pressure.data << std::endl;
+            std::cout << "Connectedness: " << classifier_.GetFactors().connectedness.data << std::endl;
             std::cout << std::endl;
             
-            if (strokes_.GetNumStrokes() <= 20) { // number of words
+            if (strokes_.GetNumStrokes() < quote_.GetNumWords()) {
                 print_not_done_ = true;
             } else {
                 curr_state_ = DISPLAY;
@@ -192,7 +191,7 @@ void HandwritingAnalyzer::drawBackgroundLines() {
 // Draws cursor wherever the pen is
 void HandwritingAnalyzer::drawCursor() {
     ofSetColor(170, 201, 224);
-    pen_cursor_.draw(ofxTablet::tabletData.abs_screen[0], ofxTablet::tabletData.abs_screen[1] - 45, 45, 45);
+    pen_cursor_.draw(ofxTablet::tabletData.abs_screen[0], ofxTablet::tabletData.abs_screen[1] - kPenImageSize, kPenImageSize, kPenImageSize);
 
 }
 

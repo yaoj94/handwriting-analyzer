@@ -5,6 +5,7 @@
 #include "catch.hpp"
 #include "classifier.h"
 #include "factors.h"
+#include "quote.h"
 
 const std::string kPressureDescriptionLow = "are empathetic and sensitive";
 const std::string kPressureDescriptionMed = "are committed to what they do and take things seriously";

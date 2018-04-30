@@ -5,37 +5,37 @@
 using namespace handwritinganalysis;
 
 void Factor::CalculateLevel() {
-    if (data_ >= middle_bound_) {
-        level_ = HIGH;
-    } else if (data_ >= lower_bound_) {
-        level_ = MED;
+    if (data >= middle_bound) {
+        level = HIGH;
+    } else if (data >= lower_bound) {
+        level = MED;
     } else {
-        level_ = LOW;
+        level = LOW;
     }
 }
 
-std::string Factor::GetAttribute() {
-    if (level_ == LOW) {
-        return attribute_.description_low_;
-    } else if (level_ == MED) {
-        return attribute_.description_med_;
+const std::string& Factor::GetAttribute() {
+    if (level == LOW) {
+        return attribute.description_low;
+    } else if (level == MED) {
+        return attribute.description_med;
     } else {
-        return attribute_.description_high_;
+        return attribute.description_high;
     }
 }
 
 HandwritingFactors::HandwritingFactors() {
-    factors_array_[0] = &pressure_;
-    factors_array_[1] = &size_;
-    factors_array_[2] = &speed_;
-    factors_array_[3] = &connectedness_;
-    factors_array_[4] = &left_margin_;
-    factors_array_[5] = &right_margin_;
+    factors_array[0] = &pressure;
+    factors_array[1] = &size;
+    factors_array[2] = &speed;
+    factors_array[3] = &connectedness;
+    factors_array[4] = &left_margin;
+    factors_array[5] = &right_margin;
 }
 
 void HandwritingFactors::ClearData() {
-    for (auto factor : factors_array_) {
-        factor->data_ = 0;
+    for (auto factor : factors_array) {
+        factor->data = 0;
     }
 }
 
@@ -51,22 +51,22 @@ void HandwritingFactors::ReadAttributesFromFile(std::string filename) {
     int next_level;
     attributes >> next_level;
     
-    for (auto factor : factors_array_) {
+    for (auto factor : factors_array) {
         // low
         if (next_level == LOW) {
-            std::getline(attributes, factor->attribute_.description_low_, '\n');
+            std::getline(attributes, factor->attribute.description_low, '\n');
             attributes >> next_level;
         }
         
         // med
         if (next_level == MED) {
-            std::getline(attributes, factor->attribute_.description_med_, '\n');
+            std::getline(attributes, factor->attribute.description_med, '\n');
             attributes >> next_level;
         }
         
         // high
         if (next_level == HIGH) {
-            std::getline(attributes, factor->attribute_.description_high_, '\n');
+            std::getline(attributes, factor->attribute.description_high, '\n');
             attributes >> next_level;
         }
     }
