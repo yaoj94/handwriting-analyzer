@@ -26,7 +26,7 @@ const std::string& Factor::GetAttribute() {
     }
 }
 
-// Constructor sets factors_array
+// Constructor sets factors_array and colors for each factor
 HandwritingFactors::HandwritingFactors() {
     factors_array[0] = &pressure;
     factors_array[1] = &size;
@@ -34,6 +34,19 @@ HandwritingFactors::HandwritingFactors() {
     factors_array[3] = &connectedness;
     factors_array[4] = &left_margin;
     factors_array[5] = &right_margin;
+    
+    ofColor pressure_color(0, 102, 153, 0);
+    pressure.color = pressure_color;
+    ofColor size_color(255, 140, 26, 0);
+    size.color = size_color;
+    ofColor speed_color(255, 255, 0, 0);
+    speed.color = speed_color;
+    ofColor connectedness_color(51, 153, 51, 0);
+    connectedness.color = connectedness_color;
+    ofColor lmargin_color(153, 51, 255, 0);
+    left_margin.color = lmargin_color;
+    ofColor rmargin_color(204, 0, 0, 0);
+    right_margin.color = rmargin_color;
 }
 
 // This method clears the data from factors.

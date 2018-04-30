@@ -1,11 +1,12 @@
 #include "ofApp.h"
 #include "ofxTablet.h"
+#include <cstdlib>
 using namespace handwritinganalysis;
 
 // Set up window, paths, and tablet
 void HandwritingAnalyzer::setup(){
     classifier_.GetFactors().ReadAttributesFromFile("attributes");
-    quote_.Setup("Part of the inhumanity of the computer is that, once it is competently programmed and working\nsmoothly, it is completely honest.");
+    quote_.Setup("Part of the inhumanity of the computer is that, once it is competently programmed and working\nsmoothly, it is completely honest."); // ~ Isaac Asimov
 
     /*// Print out all the attributes
     for (auto factor : classifier_.GetFactors().factors_array_) {
@@ -16,14 +17,15 @@ void HandwritingAnalyzer::setup(){
 
     ofSetWindowTitle("Handwriting Analyzer");
     ofBackground(0, 0, 0);
-
+    
     ofHideCursor();
     
+    // load fonts to text
     pen_cursor_.load("pen.png");
     write_text_.load("Century Gothic", 18);
-    display_text_.load("Gabriola.ttf", 30);
-    attribute_text_.load("Gabriola.ttf", 45);
-    disclaimer_.load("PrestigeEliteStd-Bd.otf", 8);
+    display_text_.load("Gabriola.ttf", 50);
+    attribute_text_.load("Gabriola.ttf", 80);
+    disclaimer_.load("PrestigeEliteStd-Bd.otf", 10);
     
     paths_.setFilled(false); // don't fill paths
     background_lines_.setFilled(false);
@@ -37,7 +39,6 @@ void HandwritingAnalyzer::setup(){
     // from ofxTablet example code
     ofxTablet::start();
     ofAddListener(ofxTablet::tabletEvent, this, &HandwritingAnalyzer::tabletMoved);
-    
 }
 
 // Update which factor gets printed to screen during DISPLAY state
@@ -89,11 +90,12 @@ void HandwritingAnalyzer::drawWriteState() {
 
 // Draws attributes and disclaimer to screen
 void HandwritingAnalyzer::drawDisplayState() {
-    ofSetColor(153, 102, 255);
+    HandwritingAnalyzer::drawBubbles();
+    
+    ofSetColor(255, 255, 255);
     string intro = "People with your handwriting style typically . . . ";
     display_text_.drawString(intro, 100, 80);
     
-    ofSetColor(204, 255, 102);
     attribute_text_.drawString(avs_, 75, ofGetWindowHeight() / 2);
     
     /*
@@ -119,7 +121,6 @@ void HandwritingAnalyzer::drawBackgroundLines() {
 void HandwritingAnalyzer::drawCursor() {
     ofSetColor(170, 201, 224);
     pen_cursor_.draw(ofxTablet::tabletData.abs_screen[0], ofxTablet::tabletData.abs_screen[1] - kPenImageSize, kPenImageSize, kPenImageSize);
-    
 }
 
 // Draws handwriting path to screen with set width and color
@@ -127,7 +128,67 @@ void HandwritingAnalyzer::drawPaths() {
     paths_.setStrokeWidth(2);
     paths_.setStrokeColor(ofColor(255, 255, 255));
     paths_.draw();
+}
+
+// Draws bubbles to screen and changes x-y position and color's alpha value
+void HandwritingAnalyzer::drawBubbles() {
+    // draw circles continuously to the screen, use different transparency values
+    for (auto& bubble : bubbles_) {
+        // wrap over when bubble exceeds width/height
+        if (bubble.x >= ofGetWindowWidth() + (bubble.radius/2)) {
+            bubble.x = - (bubble.radius/2);
+        } else {
+            bubble.x++;
+        }
+        
+        if (bubble.y >= ofGetWindowHeight() + (bubble.radius/2)) {
+            bubble.y = - (bubble.radius/2);
+        } else {
+            bubble.y++;
+        }
+        
+        // change alpha
+        if (increase_alpha_) {
+            if (bubble.color.a >= 200) {
+                increase_alpha_ = false;
+            } else {
+                bubble.color.a++;
+            }
+        } else {
+            if (bubble.color.a <= 50) {
+                increase_alpha_ = true;
+            } else {
+                bubble.color.a--;
+            }
+        }
+        
+        ofSetColor(bubble.color);
+        ofDrawCircle(bubble.x, bubble.y, bubble.radius);
+    }
+}
+
+// Sets up bubbles in all the factors
+void HandwritingAnalyzer::setBubbles() {
+    // count total levels for relative size and number of bubbles
+    int level_total;
+    for (auto factor : classifier_.GetFactors().factors_array) {
+        level_total += (factor->level + 1);
+    }
     
+    // set random numbers for x-y coordinate and radius
+    srand(ofGetSystemTime());
+    for (auto factor : classifier_.GetFactors().factors_array) {
+        int bubble_num = ((factor->level + 1) * kNumBubbles) / level_total;
+        for (int i = 0; i < bubble_num; i++) {
+            FactorBubble bubble;
+            bubble.x = rand() % ofGetWindowWidth();
+            bubble.y = rand() % ofGetWindowHeight();
+            // radius between 10 - 40
+            bubble.radius = (rand() % 30) + ((factor->level + 1) * 10);
+            bubble.color = factor->color;
+            bubbles_.push_back(bubble);
+        }
+    }
 }
 
 // Reads data from tablet once data is received and updates drawing state flags
@@ -173,9 +234,15 @@ void HandwritingAnalyzer::keyPressed(int key){
     // Write state key presses
     if (curr_state_ == WRITE) {
         if (upper_key == 'D') {
-            // Done: analyse strokes, check for doneness, change states
-            strokes_.Analyze(classifier_.GetFactors());
-            classifier_.Classify(quote_);
+            if (strokes_.GetNumStrokes() < quote_.GetNumWords()) {
+                print_not_done_ = true;
+            } else {
+                // Done: analyse strokes, check for doneness, change states
+                strokes_.Analyze(classifier_.GetFactors());
+                classifier_.Classify(quote_);
+                setBubbles();
+                curr_state_ = DISPLAY;
+            }
             
             // Print out data for testing
             std::cout << "Letter size: " << classifier_.GetFactors().size.data << std::endl;
@@ -186,13 +253,6 @@ void HandwritingAnalyzer::keyPressed(int key){
             std::cout << "Average pressure: " << classifier_.GetFactors().pressure.data << std::endl;
             std::cout << "Connectedness: " << classifier_.GetFactors().connectedness.data << std::endl;
             std::cout << std::endl;
-            
-            if (strokes_.GetNumStrokes() < quote_.GetNumWords()) {
-                print_not_done_ = true;
-            } else {
-                curr_state_ = DISPLAY;
-            }
-
         }
         if (upper_key == 'C') {
             // Clear all paths

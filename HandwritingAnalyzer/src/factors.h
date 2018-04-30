@@ -28,6 +28,7 @@ struct Factor {
     uint middle_bound;
     uint lower_bound;
     uint data;
+    ofColor color;
     
     Level level;
     Attribute attribute;
@@ -37,6 +38,14 @@ struct Factor {
     
     // Returns attribute description based on level
     const std::string& GetAttribute();
+};
+
+// Stores info for Display state background
+struct FactorBubble {
+    int x;
+    int y;
+    int radius;
+    ofColor color;
 };
 
 // Stores all factors for handwriting analysis
@@ -60,6 +69,7 @@ struct HandwritingFactors {
     // This method reads in data from file and store in Attributes.
     void ReadAttributesFromFile(std::string filename);
 };
+    
     
 } // namespace handwritinganalysis
 

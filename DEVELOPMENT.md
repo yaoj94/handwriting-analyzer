@@ -32,13 +32,13 @@
 - [X] Implement methods to check whether or not the user wrote something before pressing done
   * Split up draw function to make draw method neater, added AnalysisState enum to switch between states - only changes if the number of strokes are around the number of words in the quote
 
-- [ ] Print personality characteristics to screen
+- [X] Print personality characteristics to screen
   * Need way to store attributes and descriptions! Created separate file for attribute descriptions and stored each in Attribute struct
   * Data wasn't being updated and I realized I needed to pass by reference so I only need to change one HandwritingFactors object throughout the duration of the program
   * Problem: couldn't call the constructor of other classes in the ofApp header
   * Solution: have a setup method in the classes to initialize member variables - removed because I decided Classifier should contain the Factors since it is most directly related to the classifying
-  * Currently displays the characteristics as a list
-  * Added ofxAVString to display text in a cooler way
+  * Had it display the characteristics as a list, which was unappealing so added ofxAVString to display text in a cooler way
+  * Added FactorBubble object to draw background that depicted relative strengths/weaknesses in each attribute. So each Factor is associated with a color and the number of bubbles that get drawn depend on the level of the Factor.
 
 - [X] Write tests for file IO and Classifier
   * Problem: Tests don't run through XCode and it can't find ofMain.h file

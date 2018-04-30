@@ -55,6 +55,13 @@ private:
     uint64_t last_update_time_ = 0;
     int factor_index_ = 0;
     
+    // variables for drawing bubbles
+    const int kNumBubbles = 60;
+    std::vector<FactorBubble> bubbles_;
+    
+    // flag to either increase or decrease transparency
+    bool increase_alpha_ = true;
+    
 public:
     // Set up window, paths, and tablet
     void setup();
@@ -79,6 +86,11 @@ public:
     
     // Draws handwriting path to screen with set width and color
     void drawPaths();
+    
+    // Draws bubbles to screen and changes x-y position and color's alpha value
+    void drawBubbles();
+    
+    void setBubbles();
     
     // Reads data from tablet once data is received and updates drawing state flags
     void tabletMoved(TabletData &data);
