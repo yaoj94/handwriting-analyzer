@@ -6,96 +6,98 @@ TEST_CASE("Files are read and Attributes are set correctly") {
     factors.ReadAttributesFromFile("attributes");
     
     SECTION("Pressure") {
-        REQUIRE(factors.pressure_.attribute_.description_low_ == kPressureDescriptionLow);
-        REQUIRE(factors.pressure_.attribute_.description_med_ == kPressureDescriptionMed);
-        REQUIRE(factors.pressure_.attribute_.description_high_ == kPressureDescriptionHigh);
+        REQUIRE(factors.pressure.attribute.description_low == kPressureDescriptionLow);
+        REQUIRE(factors.pressure.attribute.description_med == kPressureDescriptionMed);
+        REQUIRE(factors.pressure.attribute.description_high == kPressureDescriptionHigh);
     }
     
     SECTION("Size") {
-        REQUIRE(factors.size_.attribute_.description_low_ == kSizeDescriptionLow);
-        REQUIRE(factors.size_.attribute_.description_med_ == kSizeDescriptionMed);
-        REQUIRE(factors.size_.attribute_.description_high_ == kSizeDescriptionHigh);
+        REQUIRE(factors.size.attribute.description_low == kSizeDescriptionLow);
+        REQUIRE(factors.size.attribute.description_med == kSizeDescriptionMed);
+        REQUIRE(factors.size.attribute.description_high == kSizeDescriptionHigh);
     }
     
     SECTION("Speed") {
-        REQUIRE(factors.speed_.attribute_.description_low_ == kSpeedDescriptionLow);
-        REQUIRE(factors.speed_.attribute_.description_med_ == kSpeedDescriptionMed);
-        REQUIRE(factors.speed_.attribute_.description_high_ == kSpeedDescriptionHigh);
+        REQUIRE(factors.speed.attribute.description_low == kSpeedDescriptionLow);
+        REQUIRE(factors.speed.attribute.description_med == kSpeedDescriptionMed);
+        REQUIRE(factors.speed.attribute.description_high == kSpeedDescriptionHigh);
     }
     
     SECTION("Connectedness") {
-        REQUIRE(factors.connectedness_.attribute_.description_low_ == kConnectednessDescriptionLow);
-        REQUIRE(factors.connectedness_.attribute_.description_med_ == kConnectednessDescriptionMed);
-        REQUIRE(factors.connectedness_.attribute_.description_high_ == kConnectednessDescriptionHigh);
+        REQUIRE(factors.connectedness.attribute.description_low == kConnectednessDescriptionLow);
+        REQUIRE(factors.connectedness.attribute.description_med == kConnectednessDescriptionMed);
+        REQUIRE(factors.connectedness.attribute.description_high == kConnectednessDescriptionHigh);
     }
     
     SECTION("Left Margin") {
-        REQUIRE(factors.left_margin_.attribute_.description_low_ == kLMarginDescriptionLow);
-        REQUIRE(factors.left_margin_.attribute_.description_med_ == kLMarginDescriptionMed);
-        REQUIRE(factors.left_margin_.attribute_.description_high_ == kLMarginDescriptionHigh);
+        REQUIRE(factors.left_margin.attribute.description_low == kLMarginDescriptionLow);
+        REQUIRE(factors.left_margin.attribute.description_med == kLMarginDescriptionMed);
+        REQUIRE(factors.left_margin.attribute.description_high == kLMarginDescriptionHigh);
     }
     
     SECTION("Right Margin") {
-        REQUIRE(factors.right_margin_.attribute_.description_low_ == kRMarginDescriptionLow);
-        REQUIRE(factors.right_margin_.attribute_.description_med_ == kRMarginDescriptionMed);
-        REQUIRE(factors.right_margin_.attribute_.description_high_ == kRMarginDescriptionHigh);
+        REQUIRE(factors.right_margin.attribute.description_low == kRMarginDescriptionLow);
+        REQUIRE(factors.right_margin.attribute.description_med == kRMarginDescriptionMed);
+        REQUIRE(factors.right_margin.attribute.description_high == kRMarginDescriptionHigh);
     }
 }
 
 TEST_CASE("Classifier outputs correct Attribute") {
     Classifier classifier;
     classifier.GetFactors().ReadAttributesFromFile("attributes");
+    Quote quote;
+    quote.Setup(quote_string);
 
     SECTION("LOW") {
-        classifier.GetFactors().pressure_.data_ = 40;
-        classifier.GetFactors().size_.data_ = 15;
-        classifier.GetFactors().speed_.data_ = 10;
-        classifier.GetFactors().connectedness_.data_ = kNumWords;
-        classifier.GetFactors().left_margin_.data_ = 60;
-        classifier.GetFactors().right_margin_.data_ = 60;
+        classifier.GetFactors().pressure.data = 40;
+        classifier.GetFactors().size.data = 15;
+        classifier.GetFactors().speed.data = 10;
+        classifier.GetFactors().connectedness.data = 20;
+        classifier.GetFactors().left_margin.data = 60;
+        classifier.GetFactors().right_margin.data = 60;
 
-        classifier.Classify(kNumWords, kNumLetters);
-        REQUIRE(classifier.GetFactors().pressure_.GetAttribute() == kPressureDescriptionLow);
-        REQUIRE(classifier.GetFactors().size_.GetAttribute() == kSizeDescriptionLow);
-        REQUIRE(classifier.GetFactors().speed_.GetAttribute() == kSpeedDescriptionLow);
-        REQUIRE(classifier.GetFactors().connectedness_.GetAttribute() == kConnectednessDescriptionLow);
-        REQUIRE(classifier.GetFactors().left_margin_.GetAttribute() == kLMarginDescriptionLow);
-        REQUIRE(classifier.GetFactors().right_margin_.GetAttribute() == kRMarginDescriptionLow);
+        classifier.Classify(quote);
+        REQUIRE(classifier.GetFactors().pressure.GetAttribute() == kPressureDescriptionLow);
+        REQUIRE(classifier.GetFactors().size.GetAttribute() == kSizeDescriptionLow);
+        REQUIRE(classifier.GetFactors().speed.GetAttribute() == kSpeedDescriptionLow);
+        REQUIRE(classifier.GetFactors().connectedness.GetAttribute() == kConnectednessDescriptionLow);
+        REQUIRE(classifier.GetFactors().left_margin.GetAttribute() == kLMarginDescriptionLow);
+        REQUIRE(classifier.GetFactors().right_margin.GetAttribute() == kRMarginDescriptionLow);
     }
 
     SECTION("MED") {
-        classifier.GetFactors().pressure_.data_ = 50;
-        classifier.GetFactors().size_.data_ = 20;
-        classifier.GetFactors().speed_.data_ = 20;
-        classifier.GetFactors().connectedness_.data_ = kNumWords * 2;
-        classifier.GetFactors().left_margin_.data_ = 100;
-        classifier.GetFactors().right_margin_.data_ = 100;
+        classifier.GetFactors().pressure.data = 50;
+        classifier.GetFactors().size.data = 20;
+        classifier.GetFactors().speed.data = 20;
+        classifier.GetFactors().connectedness.data = 40;
+        classifier.GetFactors().left_margin.data = 100;
+        classifier.GetFactors().right_margin.data = 100;
 
-        classifier.Classify(kNumWords, kNumLetters);
-        REQUIRE(classifier.GetFactors().pressure_.GetAttribute() == kPressureDescriptionMed);
-        REQUIRE(classifier.GetFactors().size_.GetAttribute() == kSizeDescriptionMed);
-        REQUIRE(classifier.GetFactors().speed_.GetAttribute() == kSpeedDescriptionMed);
-        REQUIRE(classifier.GetFactors().connectedness_.GetAttribute() == kConnectednessDescriptionMed);
-        REQUIRE(classifier.GetFactors().left_margin_.GetAttribute() == kLMarginDescriptionMed);
-        REQUIRE(classifier.GetFactors().right_margin_.GetAttribute() == kRMarginDescriptionMed);
+        classifier.Classify(quote);
+        REQUIRE(classifier.GetFactors().pressure.GetAttribute() == kPressureDescriptionMed);
+        REQUIRE(classifier.GetFactors().size.GetAttribute() == kSizeDescriptionMed);
+        REQUIRE(classifier.GetFactors().speed.GetAttribute() == kSpeedDescriptionMed);
+        REQUIRE(classifier.GetFactors().connectedness.GetAttribute() == kConnectednessDescriptionMed);
+        REQUIRE(classifier.GetFactors().left_margin.GetAttribute() == kLMarginDescriptionMed);
+        REQUIRE(classifier.GetFactors().right_margin.GetAttribute() == kRMarginDescriptionMed);
 
     }
 
     SECTION("HIGH") {
-        classifier.GetFactors().pressure_.data_ = 70;
-        classifier.GetFactors().size_.data_ = 30;
-        classifier.GetFactors().speed_.data_ = 30;
-        classifier.GetFactors().connectedness_.data_ = kNumLetters;
-        classifier.GetFactors().left_margin_.data_ = 200;
-        classifier.GetFactors().right_margin_.data_ = 200;
+        classifier.GetFactors().pressure.data = 70;
+        classifier.GetFactors().size.data = 30;
+        classifier.GetFactors().speed.data = 30;
+        classifier.GetFactors().connectedness.data = 100;
+        classifier.GetFactors().left_margin.data = 200;
+        classifier.GetFactors().right_margin.data = 200;
 
-        classifier.Classify(kNumWords, kNumLetters);
-        REQUIRE(classifier.GetFactors().pressure_.GetAttribute() == kPressureDescriptionHigh);
-        REQUIRE(classifier.GetFactors().size_.GetAttribute() == kSizeDescriptionHigh);
-        REQUIRE(classifier.GetFactors().speed_.GetAttribute() == kSpeedDescriptionHigh);
-        REQUIRE(classifier.GetFactors().connectedness_.GetAttribute() == kConnectednessDescriptionHigh);
-        REQUIRE(classifier.GetFactors().left_margin_.GetAttribute() == kLMarginDescriptionHigh);
-        REQUIRE(classifier.GetFactors().right_margin_.GetAttribute() == kRMarginDescriptionHigh);
+        classifier.Classify(quote);
+        REQUIRE(classifier.GetFactors().pressure.GetAttribute() == kPressureDescriptionHigh);
+        REQUIRE(classifier.GetFactors().size.GetAttribute() == kSizeDescriptionHigh);
+        REQUIRE(classifier.GetFactors().speed.GetAttribute() == kSpeedDescriptionHigh);
+        REQUIRE(classifier.GetFactors().connectedness.GetAttribute() == kConnectednessDescriptionHigh);
+        REQUIRE(classifier.GetFactors().left_margin.GetAttribute() == kLMarginDescriptionHigh);
+        REQUIRE(classifier.GetFactors().right_margin.GetAttribute() == kRMarginDescriptionHigh);
     }
 }
 

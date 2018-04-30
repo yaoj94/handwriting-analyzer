@@ -31,9 +31,7 @@ const std::string kRMarginDescriptionLow = "are eager to move on";
 const std::string kRMarginDescriptionMed = "are easygoing";
 const std::string kRMarginDescriptionHigh = "fear the unknown";
 
-const unsigned int kNumWords = 20;
-const unsigned int kNumLetters = 100;
-
-
+const std::string quote_string = "Part of the inhumanity of the computer is that, once it is competently programmed "
+        "and working\nsmoothly, it is completely honest.";
 
 #endif /* tests_h */
