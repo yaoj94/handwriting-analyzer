@@ -55,11 +55,12 @@ public:
     
     // Sets variables that store analysis data to be called when user is done writing
     void Analyze(HandwritingFactors& factors);
-        
+    
     // Returns size of strokes_
     uint GetNumStrokes();
 
-    void DrawStrokes(); //for testing purposes
+    // Draws strokes used for testing purposes
+    void DrawStrokes();
 };
 } // namespace handwritinganalysis
 

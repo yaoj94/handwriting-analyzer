@@ -15,9 +15,17 @@ private:
     
 public:
     Quote();
+    
+    // Setup method that initializes variables and counts number of words and letters
     void Setup(const std::string& quote);
+    
+    // Returns number of words in quote
     const uint& GetNumWords();
+    
+    // Returns number of letters in quote
     const uint& GetNumLetters();
+    
+    // Returns string quote
     const std::string& GetQuote();
 };
     

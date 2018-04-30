@@ -114,7 +114,12 @@ uint Strokes::CalculateAverageSpeed() {
 }
 
 // Sets variables that store analysis data to be called when user is done writing
+// Input: HandwritingFactors reference to store data in
 void Strokes::Analyze(HandwritingFactors& factors) {
+    // Connectedness ranges from number of words to number of letters
+    // There are 2 ways for handwriting to be connected:
+    // 1. writing in cursive or with few lifts
+    // 2. writing so close together that the letters intersect
     if (connected_points_ >= strokes_.size()) {
         factors.connectedness.data = 1;
     } else {
@@ -128,6 +133,7 @@ void Strokes::Analyze(HandwritingFactors& factors) {
     factors.right_margin.data = ofGetWindowWidth() - rightmost_x_;
 }
 
+// Returns size of strokes_
 uint Strokes::GetNumStrokes() {
     return strokes_.size();
 }

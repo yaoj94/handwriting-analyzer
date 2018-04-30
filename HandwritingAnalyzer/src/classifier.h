@@ -28,13 +28,17 @@ private:
     const uint kMarginsLow = ofGetWindowWidth() * MARGINLOWFACTOR;
     
     HandwritingFactors factors_;
-    uint num_words_;
-    uint num_letters_;
     
 public:
     Classifier();
+    
+    // This method classifies factors based on bounds and data collected. It calls calculate level for each factor.
     void Classify(Quote& quote);
+    
+    // This method sets bounds for all Factors in factors_
     void SetBounds(Quote& quote);
+    
+    // Returns HandwritingFactors reference
     HandwritingFactors& GetFactors();
 };
     

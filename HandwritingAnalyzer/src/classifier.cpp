@@ -4,8 +4,11 @@ using namespace handwritinganalysis;
 #define WORDSFACTOR 1.5
 #define LETTERSFACTOR 0.8
 
+// Constructor
 Classifier::Classifier() {};
 
+// This method classifies factors based on bounds and data collected. It calls calculate level for each factor.
+// Input: Quote object to set bounds with
 void Classifier::Classify(Quote& quote) {
     SetBounds(quote);
     for (auto factor : factors_.factors_array) {
@@ -13,6 +16,8 @@ void Classifier::Classify(Quote& quote) {
     }
 }
 
+// This method sets bounds for all Factors in factors_
+// Input: Quote object to extract data from
 void Classifier::SetBounds(Quote& quote) {
     factors_.pressure.middle_bound = kPressureMid;
     factors_.pressure.lower_bound = kPressureLow;
@@ -28,6 +33,7 @@ void Classifier::SetBounds(Quote& quote) {
     factors_.right_margin.lower_bound = kMarginsLow;
 }
 
+// Returns HandwritingFactors reference
 HandwritingFactors& Classifier::GetFactors() {
     return factors_;
 }

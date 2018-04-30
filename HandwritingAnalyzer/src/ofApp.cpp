@@ -7,7 +7,7 @@ void HandwritingAnalyzer::setup(){
     classifier_.GetFactors().ReadAttributesFromFile("attributes");
     quote_.Setup("Part of the inhumanity of the computer is that, once it is competently programmed and working\nsmoothly, it is completely honest.");
 
-    /*
+    /*// Print out all the attributes
     for (auto factor : classifier_.GetFactors().factors_array_) {
         std::cout << factor->attribute_.description_low_ << std::endl;
         std::cout << factor->attribute_.description_med_ << std::endl;
@@ -40,20 +40,22 @@ void HandwritingAnalyzer::setup(){
     
 }
 
-//--------------------------------------------------------------
+// Update which factor gets printed to screen during DISPLAY state
 void HandwritingAnalyzer::update(){
-    if (curr_state_ == DISPLAY && ofGetElapsedTimeMillis() - last_update_time_ >= 3000) {
+    if (curr_state_ == DISPLAY && ofGetElapsedTimeMillis() - last_update_time_ >= kAttributeUpdatePeriod) {
         avs_.setup(classifier_.GetFactors().factors_array[factor_index_]->GetAttribute());
         avs_.play(5, 1000);
         last_update_time_ = ofGetElapsedTimeMillis();
+        
+        // Increment factor
         factor_index_++;
-        if (factor_index_ >= 6) {
+        if (factor_index_ >= classifier_.GetFactors().factors_array.size()) {
             factor_index_ = 0;
         }
     }
 }
 
-// Draws background, instructions, and paths
+// Draws write state and display state
 void HandwritingAnalyzer::draw(){
     if (curr_state_ == WRITE) {
         HandwritingAnalyzer::drawWriteState();
@@ -62,6 +64,7 @@ void HandwritingAnalyzer::draw(){
     }
 }
 
+// Draws instructions, quote, and paths to screen
 void HandwritingAnalyzer::drawWriteState() {
     HandwritingAnalyzer::drawBackgroundLines();
     
@@ -84,6 +87,7 @@ void HandwritingAnalyzer::drawWriteState() {
     //strokes_.drawStrokes();
 }
 
+// Draws attributes and disclaimer to screen
 void HandwritingAnalyzer::drawDisplayState() {
     ofSetColor(153, 102, 255);
     string intro = "People with your handwriting style typically . . . ";
@@ -101,23 +105,44 @@ void HandwritingAnalyzer::drawDisplayState() {
     
     ofSetColor(200, 200, 200);
     string disclaimer = "Disclaimer: The results from this test are for entertainment purposes only and are not clinically proven. Use the information at your own risk.";
-    disclaimer_.drawString(disclaimer, 20, ofGetWindowHeight() - 20);
+    disclaimer_.drawString(disclaimer, 50, ofGetWindowHeight() - 50);
+}
+
+// Draws background lines
+void HandwritingAnalyzer::drawBackgroundLines() {
+    background_lines_.setStrokeWidth(1);
+    background_lines_.setStrokeColor(ofColor(179, 236, 255));
+    background_lines_.draw();
+}
+
+// Draws cursor wherever the pen is
+void HandwritingAnalyzer::drawCursor() {
+    ofSetColor(170, 201, 224);
+    pen_cursor_.draw(ofxTablet::tabletData.abs_screen[0], ofxTablet::tabletData.abs_screen[1] - kPenImageSize, kPenImageSize, kPenImageSize);
+    
+}
+
+// Draws handwriting path to screen with set width and color
+void HandwritingAnalyzer::drawPaths() {
+    paths_.setStrokeWidth(2);
+    paths_.setStrokeColor(ofColor(255, 255, 255));
+    paths_.draw();
+    
 }
 
 // Reads data from tablet once data is received and updates drawing state flags
 void HandwritingAnalyzer::tabletMoved(TabletData &data) {
-    curr_pressure_ = data.pressure * 100;
+    curr_pressure_ = data.pressure * kPressureFactor;
 
     // Change drawing flags based on pressure
-    if (curr_pressure_ >= 5) {
+    if (curr_pressure_ >= kPressureThreshold) {
         if (!isDrawing_) {
             wasDrawing_ = false;
         } else {
             wasDrawing_ = true;
         }
         isDrawing_ = true;
-        //std::cout << "Pressure: " << curr_pressure_ << std::endl;
-
+        
     } else {
         if (isDrawing_) {
             wasDrawing_ = true;
@@ -131,15 +156,10 @@ void HandwritingAnalyzer::tabletMoved(TabletData &data) {
     if (!wasDrawing_ && isDrawing_) {           // just started drawing
         paths_.moveTo(ofPoint(data.abs_screen[0], data.abs_screen[1]));
         strokes_.AddPoint(ofPoint(data.abs_screen[0], data.abs_screen[1]), curr_pressure_);
-        //curr_path_.moveTo(ofPoint(data.abs_screen[0], data.abs_screen[1]));
     } else if (isDrawing_) {                    // still drawing
-        //curr_path_.lineTo(ofPoint(data.abs_screen[0], data.abs_screen[1]));
         paths_.lineTo(ofPoint(data.abs_screen[0], data.abs_screen[1]));
         paths_.newSubPath(); //?
         strokes_.AddPoint(ofPoint(data.abs_screen[0], data.abs_screen[1]), curr_pressure_);
-        //pressure_paths_.insert(make_pair(curr_pressure_, curr_path_));
-        //curr_path_.clear();
-        //curr_path_.moveTo(ofPoint(data.abs_screen[0], data.abs_screen[1]));
     } else if (wasDrawing_ && !isDrawing_) {    // just stopped drawing
         strokes_.EndStroke();
     }
@@ -150,6 +170,7 @@ void HandwritingAnalyzer::tabletMoved(TabletData &data) {
 void HandwritingAnalyzer::keyPressed(int key){
     int upper_key = toupper(key);
     
+    // Write state key presses
     if (curr_state_ == WRITE) {
         if (upper_key == 'D') {
             // Done: analyse strokes, check for doneness, change states
@@ -178,45 +199,6 @@ void HandwritingAnalyzer::keyPressed(int key){
             strokes_.ResetStrokes();
             paths_.clear();
         }
-    }
-}
-
-// Draws background lines
-void HandwritingAnalyzer::drawBackgroundLines() {
-    background_lines_.setStrokeWidth(1);
-    background_lines_.setStrokeColor(ofColor(179, 236, 255));
-    background_lines_.draw();
-}
-
-// Draws cursor wherever the pen is
-void HandwritingAnalyzer::drawCursor() {
-    ofSetColor(170, 201, 224);
-    pen_cursor_.draw(ofxTablet::tabletData.abs_screen[0], ofxTablet::tabletData.abs_screen[1] - kPenImageSize, kPenImageSize, kPenImageSize);
-
-}
-
-// Draws handwriting path to screen with set width and color
-void HandwritingAnalyzer::drawPaths() {
-    paths_.setStrokeWidth(2);
-    paths_.setStrokeColor(ofColor(255, 255, 255));
-    paths_.draw();
-    
-    /* test code for changing pressure
-     for (auto path : pressure_paths_) {
-     path.second.setStrokeColor(ofColor(255, 255, 255));
-     path.second.setStrokeWidth(strokeWidthFromPressure(path.first));
-     path.second.draw();
-     }*/
-}
-
-// Calculates the width of the stroke based on pressure
-float HandwritingAnalyzer::strokeWidthFromPressure(const float& pressure) {
-    if (pressure >= 75) {
-        return 7;
-    } else if (pressure <= 5) {
-        return 0.5;
-    } else {
-        return pressure / 20;
     }
 }
 
