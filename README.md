@@ -4,9 +4,9 @@ This project analyzes handwriting using a Wacom Tablet where a person writes ont
 
 ## How to Use
 
-This is an OpenFrameworks program and requires the addons, ofxTablet and ofxAVString. It was tested using the Wacom Intuos Tablet, thus Wacom Tablet drivers should be installed and a tablet is required.
+This is an OpenFrameworks program and requires the addons, [ofxTablet](https://github.com/mattebb/ofxTablet) and [ofxAVString](https://github.com/hideyukisaito/ofxAVString). To build the program, simply clone the aforementioned addons and add them to the project. When running the program, it will open in fullscreen mode. To exit, press ESC.
 
-The program was written and currently tested on XCode and MacOS.
+The program was written and currently tested on XCode and MacOS. It was tested using the Wacom Intuos Pen and Touch Tablet, thus Wacom Tablet drivers should be installed and a tablet is required. 
 
 ## Testing
 
