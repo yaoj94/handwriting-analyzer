@@ -2,7 +2,8 @@
 using namespace handwritinganalysis;
 
 // Constructor that initializes member variables
-Strokes::Strokes() : perimeter_(0), total_time_millis_(0), reset_timer_(true), connected_points_(0),  leftmost_x_(ofGetWindowWidth()), rightmost_x_(0) {}
+Strokes::Strokes() : perimeter_(0), total_time_millis_(0), reset_timer_(true), 
+connected_points_(0),  leftmost_x_(ofGetWindowWidth()), rightmost_x_(0) {}
 
 // This method is called when the user is drawing and a point needs to be added to the line.
 // Private variables are updated to keep track of the timer, margins, and connectedness value.
@@ -32,7 +33,8 @@ void Strokes::AddPoint(const ofPoint& point, const float& pressure) {
     }
 }
 
-// This method is called when the user lifts the pen after each stroke. Member variables are updated accordingly.
+// This method is called when the user lifts the pen after each stroke. 
+// Member variables are updated accordingly.
 void Strokes::EndStroke() {
     perimeter_ += curr_stroke_.getPerimeter();  // add to total length
     strokes_.push_back(curr_stroke_);           // store all previous strokes

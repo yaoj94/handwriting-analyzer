@@ -32,7 +32,8 @@ private:
 public:
     Classifier();
     
-    // This method classifies factors based on bounds and data collected. It calls calculate level for each factor.
+    // This method classifies factors based on bounds and data collected. It calls calculate 
+    // level for each factor.
     void Classify(Quote& quote);
     
     // This method sets bounds for all Factors in factors_

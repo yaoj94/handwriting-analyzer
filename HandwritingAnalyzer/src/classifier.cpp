@@ -7,7 +7,8 @@ using namespace handwritinganalysis;
 // Constructor
 Classifier::Classifier() {};
 
-// This method classifies factors based on bounds and data collected. It calls calculate level for each factor.
+// This method classifies factors based on bounds and data collected. It calls calculate 
+// level for each factor.
 // Input: Quote object to set bounds with
 void Classifier::Classify(Quote& quote) {
     SetBounds(quote);

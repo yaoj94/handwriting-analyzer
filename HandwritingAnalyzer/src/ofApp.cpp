@@ -14,7 +14,7 @@ void HandwritingAnalyzer::setup(){
         std::cout << factor->attribute_.description_med_ << std::endl;
         std::cout << factor->attribute_.description_high_ << std::endl;
     }*/
-
+    
     ofSetWindowTitle("Handwriting Analyzer");
     ofBackground(0, 0, 0);
     
@@ -43,7 +43,8 @@ void HandwritingAnalyzer::setup(){
 
 // Update which factor gets printed to screen during DISPLAY state
 void HandwritingAnalyzer::update(){
-    if (curr_state_ == DISPLAY && ofGetElapsedTimeMillis() - last_update_time_ >= kAttributeUpdatePeriod) {
+    if (curr_state_ == DISPLAY && ofGetElapsedTimeMillis() - last_update_time_ >= 
+        kAttributeUpdatePeriod) {
         avs_.setup(classifier_.GetFactors().factors_array[factor_index_]->GetAttribute());
         avs_.play(5, 1000);
         last_update_time_ = ofGetElapsedTimeMillis();
@@ -120,7 +121,8 @@ void HandwritingAnalyzer::drawBackgroundLines() {
 // Draws cursor wherever the pen is
 void HandwritingAnalyzer::drawCursor() {
     ofSetColor(170, 201, 224);
-    pen_cursor_.draw(ofxTablet::tabletData.abs_screen[0], ofxTablet::tabletData.abs_screen[1] - kPenImageSize, kPenImageSize, kPenImageSize);
+    pen_cursor_.draw(ofxTablet::tabletData.abs_screen[0], ofxTablet::tabletData.abs_screen[1] - 
+        kPenImageSize, kPenImageSize, kPenImageSize);
 }
 
 // Draws handwriting path to screen with set width and color

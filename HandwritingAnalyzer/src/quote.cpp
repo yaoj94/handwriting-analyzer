@@ -12,8 +12,8 @@ void Quote::Setup(const std::string& quote) {
     num_words_ = 0;
     num_letters_ = 0;
     
-    // Count number of words and letters
-    // Code below derived from: https://stackoverflow.com/questions/3672234/c-function-to-count-all-the-words-in-a-string
+    // Count number of words and letters. Code below derived from:
+    // https://stackoverflow.com/questions/3672234/c-function-to-count-all-the-words-in-a-string
     if (isalnum(quote_[0])) {
         num_words_++;
         num_letters_++;

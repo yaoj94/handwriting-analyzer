@@ -47,7 +47,8 @@ public:
     // Input: ofPoint the point to add, float the pressure of the pen at that point
     void AddPoint(const ofPoint& point, const float& pressure);
     
-    // This method is called when the user lifts the pen after each stroke. Member variables are updated accordingly.
+    // This method is called when the user lifts the pen after each stroke. 
+    // Member variables are updated accordingly.
     void EndStroke();
     
     // This method resets all variables and is called when the user wants to start over
