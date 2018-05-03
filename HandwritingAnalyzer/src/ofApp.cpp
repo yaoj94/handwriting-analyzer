@@ -230,6 +230,7 @@ void HandwritingAnalyzer::tabletMoved(TabletData &data) {
 
 // 'D' Changes state when user is done
 // 'C' Clears strokes when user wants to start over
+// 'R' Resets the program when in display state
 void HandwritingAnalyzer::keyPressed(int key){
     int upper_key = toupper(key);
     
@@ -258,6 +259,13 @@ void HandwritingAnalyzer::keyPressed(int key){
         }
         if (upper_key == 'C') {
             // Clear all paths
+            strokes_.ResetStrokes();
+            paths_.clear();
+        }
+    } else {
+        // Reset program
+        if (upper_key == 'R') {
+            curr_state_ = WRITE;
             strokes_.ResetStrokes();
             paths_.clear();
         }

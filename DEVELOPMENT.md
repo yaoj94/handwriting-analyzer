@@ -44,4 +44,6 @@
   * Problem: Tests don't run through XCode and it can't find ofMain.h file
   * Solution: Copied the files and edited it so that the files don't depend on ofMain.h. Ran tests on CLion.
 
+- [X] Allow user to reset the program during Display state
+
 
